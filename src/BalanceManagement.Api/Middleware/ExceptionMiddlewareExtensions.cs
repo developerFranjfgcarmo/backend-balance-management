@@ -1,4 +1,6 @@
-﻿namespace BalanceManagement.Api.Middleware
+﻿using Microsoft.AspNetCore.Builder;
+
+namespace BalanceManagement.Api.Middleware
 {
     public static class ExceptionMiddlewareExtensions
     {
