@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 
 namespace BalanceManagement.Api
 {
@@ -25,6 +26,10 @@ namespace BalanceManagement.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddSwaggerGen(s =>
+            {
+                s.SwaggerDoc("v1", new OpenApiInfo { Title = "Balance Management", Version = "v1" });
+            });
             //Dependency Injection
             services.AddDataBase(Configuration).AddServices();
         }
@@ -36,6 +41,13 @@ namespace BalanceManagement.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("v1/swagger.json", "Balance Management V1");
+            });
+
             app.UseCustomExceptionMiddleware();
             app.UseRouting();
 
