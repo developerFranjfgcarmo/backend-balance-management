@@ -21,5 +21,6 @@ namespace BalanceManagement.Data.Entities
         public int RoleId { get; set; }
         public virtual Role Role { get; set; }
         public virtual ICollection<Account> Accounts { get; set; }
+        public virtual ICollection<AccountBalance> AccountBalances { get; set; }
     }
 }
