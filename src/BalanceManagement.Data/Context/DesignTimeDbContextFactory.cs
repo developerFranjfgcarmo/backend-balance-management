@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace BalanceManagement.Data.Context
 {
@@ -10,7 +11,7 @@ namespace BalanceManagement.Data.Context
     ///     default constructor. Design-time services will automatically discover implementations of this interface
     ///     that are in the same assembly as the derived context.
     /// </summary>
-    public class DesignTimeDbContextFactory
+    public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<BalanceManagementDbContext>
     {
         public BalanceManagementDbContext CreateDbContext(string[] args)
         {

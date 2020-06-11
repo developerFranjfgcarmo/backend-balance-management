@@ -14,8 +14,6 @@ namespace BalanceManagement.Data.Entities
         public string Street { get; set; }
         public string PostalCode { get; set; }
         public string City { get; set; }
-        public string Country { get; set; }
-        public string AboutMe { get; set; }
         public bool Active { get; set; }
         public bool IsDeleted { get; set; }
         public int RoleId { get; set; }

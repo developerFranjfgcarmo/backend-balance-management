@@ -9,7 +9,8 @@ namespace BalanceManagement.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Role> builder)
         {
-            throw new NotImplementedException();
+            builder.ToTable("Role");
+            builder.Property(p => p.Name).HasMaxLength(25).IsRequired();
         }
     }
 }
