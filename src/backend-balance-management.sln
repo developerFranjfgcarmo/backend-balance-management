@@ -5,13 +5,13 @@ VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BalanceManagement.Api", "BalanceManagement.Api\BalanceManagement.Api.csproj", "{12065E01-6544-407B-A1BC-E681817BE1B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BalanceManagement.Data", "BalanceManagement.Data\BalanceManagement.Data.csproj", "{E4FCFC89-EE6E-4A88-AB91-39836298B88E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BalanceManagement.Data", "BalanceManagement.Data\BalanceManagement.Data.csproj", "{E4FCFC89-EE6E-4A88-AB91-39836298B88E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BalanceManagement.Domain", "BalanceManagement.Domain\BalanceManagement.Domain.csproj", "{C71FBD50-EFE6-485E-A7CD-CCC19F75486A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BalanceManagement.Service", "BalanceManagement.Domain\BalanceManagement.Service.csproj", "{C71FBD50-EFE6-485E-A7CD-CCC19F75486A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BalanceManagement.Test", "BalanceManagement.Test\BalanceManagement.Test.csproj", "{8887E91F-1386-4BAB-A082-1D90D018F1A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BalanceManagement.Test", "BalanceManagement.Test\BalanceManagement.Test.csproj", "{8887E91F-1386-4BAB-A082-1D90D018F1A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BalanceManagement.Contracts", "BalanceManagement.Contracts\BalanceManagement.Contracts.csproj", "{5848A1A3-D1FB-4301-B84A-00232431E796}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BalanceManagement.Contracts", "BalanceManagement.Contracts\BalanceManagement.Contracts.csproj", "{5848A1A3-D1FB-4301-B84A-00232431E796}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

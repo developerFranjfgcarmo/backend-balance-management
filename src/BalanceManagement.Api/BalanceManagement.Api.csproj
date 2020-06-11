@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BalanceManagement.Domain\BalanceManagement.Domain.csproj" />
+    <ProjectReference Include="..\BalanceManagement.Domain\BalanceManagement.Service.csproj" />
   </ItemGroup>
 
 </Project>

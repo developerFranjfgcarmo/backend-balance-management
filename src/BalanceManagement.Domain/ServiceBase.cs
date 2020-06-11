@@ -1,12 +1,12 @@
-﻿using BalanceManagement.Data.Context;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using BalanceManagement.Data.Context;
 
-namespace BalanceManagement.Domain
+namespace BalanceManagement.Service
 {
-    public class DomainBase : IDisposable
+    public class ServiceBase : IDisposable
     {
-        public DomainBase(IBalanceManagementDbContext balanceManagementDbContext)
+        public ServiceBase(IBalanceManagementDbContext balanceManagementDbContext)
         {
             BalanceManagementDbContext = balanceManagementDbContext;
         }
@@ -23,7 +23,7 @@ namespace BalanceManagement.Domain
         }
 
         #region [Disposable]
-        ~DomainBase()
+        ~ServiceBase()
         {
             Dispose(false);
         }

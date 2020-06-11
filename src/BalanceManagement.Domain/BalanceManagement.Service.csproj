@@ -9,8 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Domain\" />
-    <Folder Include="IDomain\" />
+    <Folder Include="Service\" />
+    <Folder Include="IService\" />
   </ItemGroup>
 
 </Project>
