@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using BalanceManagement.Data.Entities;
 
 namespace BalanceManagement.Data.Context
 {
@@ -10,5 +8,10 @@ namespace BalanceManagement.Data.Context
         public BalanceManagementDbContext(DbContextOptions options) : base(options)
         {
         }
+
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Account> Accounts { get; set; }
+        public DbSet<AccountBalance> AccountBalances { get; set; }
     }
 }
