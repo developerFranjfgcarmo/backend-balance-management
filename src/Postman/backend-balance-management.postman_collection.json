@@ -1,0 +1,87 @@
+{
+	"info": {
+		"_postman_id": "47cffb02-f985-40ac-aa28-ecfc01a2f8c0",
+		"name": "backend-balance-management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Add User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userName\": \"Franjfgcarmo\",\r\n  \"password\": \"1234\",\r\n  \"firstName\": \"Francisco\",\r\n  \"surname\": \"Fernández\",\r\n  \"nick\": \"Fran\",\r\n  \"phoneNumber\": \"654987321\",\r\n  \"street\": \"Calle Romero\",\r\n  \"postalCode\": \"41410\",\r\n  \"city\": \"Carmona\",\r\n  \"roleId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44353/api/user",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44353",
+							"path": [
+								"api",
+								"user"
+							]
+						},
+						"description": "Add User"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Login",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"Franjfgcarmo\",\r\n    \"password\":\"1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44353/api/login/authenticate",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44353",
+					"path": [
+						"api",
+						"login",
+						"authenticate"
+					]
+				},
+				"description": "## Login request\r\n\r\n### Pameter:\r\n- username\r\n- password"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
