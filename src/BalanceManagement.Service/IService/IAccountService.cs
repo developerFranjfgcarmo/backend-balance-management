@@ -10,9 +10,10 @@ namespace BalanceManagement.Service.IService
         Task<AccountDto> AddAsync(AccountDto accountDto);
         Task<AccountDto> UpdateAsync(AccountDto accountDto);
         Task<bool> DeleteAsync(int id);
-        Task<AccountDto> GetByIdAsync(int id);
-        Task<AccountDetailsDto> GetBalanceByAccountAsync(AccountFilter accountFilter);
-        Task<bool> ModifyBalanceAsync(ModifyBalanceDto modifyBalance);
+        Task<AccountDto> GetByUserIdAsync(int id);
+        Task<PagedCollection<AccountDetailsDto>> GetBalanceByAccountAsync(AccountFilter accountFilter);
+        Task<bool> ModifyBalanceAsync( ModifyBalanceDto modifyBalance);
         Task<bool> BalanceTransferToUser(BalanceTransferDto balanceTransfer);
+        Task<bool> IsOwnerAccount(int userId, int accountId);
     }
 }
