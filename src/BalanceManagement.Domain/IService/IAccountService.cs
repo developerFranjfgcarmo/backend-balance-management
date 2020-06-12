@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using BalanceManagement.Contracts.Dtos;
+using BalanceManagement.Contracts.Dtos.Accounts;
 using BalanceManagement.Contracts.Dtos.Filter;
 
 namespace BalanceManagement.Service.IService

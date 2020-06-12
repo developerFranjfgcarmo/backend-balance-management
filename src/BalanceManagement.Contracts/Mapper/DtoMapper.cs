@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BalanceManagement.Contracts.Dtos;
+using BalanceManagement.Contracts.Dtos.Users;
 using BalanceManagement.Data.Entities;
 
 namespace BalanceManagement.Contracts.Mapper
@@ -12,7 +13,7 @@ namespace BalanceManagement.Contracts.Mapper
         public DtoMapper()
         {
             CreateMap<UserDto, User>();
-            CreateMap<User, UserDto>().ForMember(f=>f.Password,map=>map.MapFrom(string.Empty));
+            CreateMap<User, UserDto>().ForMember(f=>f.Password,map=> map.Ignore());
         }
     }
 }
