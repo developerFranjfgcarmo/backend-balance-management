@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BalanceManagement.Contracts.Dtos;
+using BalanceManagement.Contracts.Mapper;
 using BalanceManagement.Data.Context;
+using BalanceManagement.Data.Entities;
 using BalanceManagement.Service.IService;
+using Microsoft.EntityFrameworkCore;
 
 namespace BalanceManagement.Service.Service
 {
@@ -14,24 +14,38 @@ namespace BalanceManagement.Service.Service
         {
         }
 
-        public Task<UserDto> AddAsync(UserDto user)
+        public async Task<UserDto> AddAsync(UserDto user)
         {
-            throw new NotImplementedException();
+            var entity = await BalanceManagementDbContext.Users.AddAsync(user.MapTo<User>());
+            await SaveChangesAsync();
+            return entity.Entity.MapTo<UserDto>();
+
         }
 
-        public Task<UserDto> UpdateAsync(UserDto user)
+        public async Task<UserDto> UpdateAsync(UserDto user)
         {
-            throw new NotImplementedException();
+            var currentUser = await GetEntityByIdAsync(user.Id);
+            var newUser = user.MapTo<UserDto>();
+            BalanceManagementDbContext.Entry(currentUser).CurrentValues.SetValues(newUser);
+            await SaveChangesAsync();
+            return newUser.MapTo<UserDto>();
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var user = await GetEntityByIdAsync(id);
+            user.IsDeleted = true;
+            return await SaveChangesAsync();
         }
 
-        public Task<UserDto> GetByIdAsync(int id)
+        public async Task<UserDto> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var owner = await GetEntityByIdAsync(id);
+            return owner.MapTo<UserDto>();
+        }
+        private async Task<User> GetEntityByIdAsync(int id)
+        {
+            return await BalanceManagementDbContext.Users.FirstOrDefaultAsync(w => w.Id == id && !w.IsDeleted);
         }
     }
 }
