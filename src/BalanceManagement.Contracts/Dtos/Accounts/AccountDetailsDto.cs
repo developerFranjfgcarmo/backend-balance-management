@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace BalanceManagement.Contracts.Dtos
+namespace BalanceManagement.Contracts.Dtos.Accounts
 {
     public class AccountDetailsDto: AccountDto
     {

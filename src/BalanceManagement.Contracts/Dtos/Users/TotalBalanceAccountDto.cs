@@ -1,4 +1,4 @@
-﻿namespace BalanceManagement.Contracts.Dtos
+﻿namespace BalanceManagement.Contracts.Dtos.Users
 {
     public class TotalBalanceAccountDto
     {
