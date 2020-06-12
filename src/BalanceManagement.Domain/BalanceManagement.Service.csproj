@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BalanceManagement.Contracts\BalanceManagement.Contracts.csproj" />
     <ProjectReference Include="..\BalanceManagement.Data\BalanceManagement.Data.csproj" />
   </ItemGroup>
 
