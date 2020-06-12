@@ -1,16 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BalanceManagement.Api.Extensions;
 using BalanceManagement.Api.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 
 namespace BalanceManagement.Api
 {
@@ -27,10 +21,8 @@ namespace BalanceManagement.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSwaggerGen(s =>
-            {
-                s.SwaggerDoc("v1", new OpenApiInfo { Title = "Balance Management", Version = "v1" });
-            });
+            services.AddSwaggerDocumentation();
+
             services.AddCorsPolicies(PolicyOrigingAllowed);
 
             services.AddAuthenticationWithJwtBearer(Configuration);
