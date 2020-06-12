@@ -1,4 +1,6 @@
 ﻿using BalanceManagement.Data.Context;
+using BalanceManagement.Service.IService;
+using BalanceManagement.Service.Service;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +19,8 @@ namespace BalanceManagement.Api.Extensions
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddScoped<IBalanceManagementDbContext, BalanceManagementDbContext>();
-            //todo:domain
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IUserService, UserService>();
             return services;
         }
     }
