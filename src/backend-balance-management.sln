@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BalanceManagement.Api", "Ba
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BalanceManagement.Data", "BalanceManagement.Data\BalanceManagement.Data.csproj", "{E4FCFC89-EE6E-4A88-AB91-39836298B88E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BalanceManagement.Service", "BalanceManagement.Domain\BalanceManagement.Service.csproj", "{C71FBD50-EFE6-485E-A7CD-CCC19F75486A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BalanceManagement.Service", "BalanceManagement.Service\BalanceManagement.Service.csproj", "{C71FBD50-EFE6-485E-A7CD-CCC19F75486A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BalanceManagement.Test", "BalanceManagement.Test\BalanceManagement.Test.csproj", "{8887E91F-1386-4BAB-A082-1D90D018F1A1}"
 EndProject

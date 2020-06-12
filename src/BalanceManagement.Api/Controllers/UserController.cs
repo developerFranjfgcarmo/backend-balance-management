@@ -1,15 +1,18 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using BalanceManagement.Contracts.Dtos;
 using BalanceManagement.Contracts.Dtos.Filter;
 using BalanceManagement.Contracts.Dtos.Users;
+using BalanceManagement.Data.Types;
 using BalanceManagement.Service.IService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BalanceManagement.Api.Controllers
 {
     [Route("api/user")]
     [ApiController]
+    [Authorize]
+    [Authorize(Roles = nameof(Roles.User))]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -19,7 +22,8 @@ namespace BalanceManagement.Api.Controllers
             _userService = userService;
         }
 
-         [HttpPost]
+        [AllowAnonymous]
+        [HttpPost]
         public async Task<IActionResult> AddAsync(UserDto owner)
         {
             if (await _userService.ExistsUser(owner)) return Conflict("username exists");
