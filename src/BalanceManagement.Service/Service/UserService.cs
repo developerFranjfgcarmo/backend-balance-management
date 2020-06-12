@@ -41,7 +41,7 @@ namespace BalanceManagement.Service.Service
             //todo: encrypt  password
             Debug.Assert(user == null);
             var currentUser = await GetEntityByIdAsync(user.Id);
-            var newUser = user.MapTo<UserDto>();
+            var newUser = user.MapTo<User>();
             BalanceManagementDbContext.Entry(currentUser).CurrentValues.SetValues(newUser);
             await SaveChangesAsync();
             return newUser.MapTo<UserDto>();
