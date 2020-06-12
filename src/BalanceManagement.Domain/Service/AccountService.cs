@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BalanceManagement.Service.Service
 {
-    class AccountService
+    public class AccountService
     {
     }
 }
