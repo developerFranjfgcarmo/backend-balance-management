@@ -1,7 +1,7 @@
 ﻿using System;
 using AutoMapper;
 
-namespace OwnerPropertyManagement.Contracts.Mapper
+namespace BalanceManagement.Contracts.Mapper
 {
     public static class ObjectMapper
     {

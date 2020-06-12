@@ -1,7 +1,8 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
+using BalanceManagement.Contracts.Dtos;
+using BalanceManagement.Data.Entities;
 
-namespace OwnerPropertyManagement.Contracts.Mapper
+namespace BalanceManagement.Contracts.Mapper
 {
     /// <summary>
     ///     Configuration of Dtos
@@ -9,7 +10,9 @@ namespace OwnerPropertyManagement.Contracts.Mapper
     public class DtoMapper : Profile
     {
         public DtoMapper()
-        {          
+        {
+            CreateMap<UserDto, User>();
+            CreateMap<User, UserDto>().ForMember(f=>f.Password,map=>map.MapFrom(string.Empty));
         }
     }
 }
