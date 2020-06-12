@@ -21,6 +21,7 @@ namespace BalanceManagement.Api
             Configuration = configuration;
         }
         public IConfiguration Configuration { get; }
+        private string PolicyOrigingAllowed => "App";
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -30,6 +31,9 @@ namespace BalanceManagement.Api
             {
                 s.SwaggerDoc("v1", new OpenApiInfo { Title = "Balance Management", Version = "v1" });
             });
+            services.AddCorsPolicies(PolicyOrigingAllowed);
+
+            services.AddAuthenticationWithJwtBearer(Configuration);
             //Dependency Injection
             services.AddDataBase(Configuration).AddServices();
         }
@@ -51,9 +55,10 @@ namespace BalanceManagement.Api
             app.UseCustomExceptionMiddleware();
             app.UseRouting();
 
-            //add cors
-            //app.UseAuthentication();
-            //app.UseAuthorization();
+            app.UseCors(PolicyOrigingAllowed);
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
