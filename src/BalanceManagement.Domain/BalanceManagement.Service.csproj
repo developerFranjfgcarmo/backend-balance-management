@@ -8,9 +8,4 @@
     <ProjectReference Include="..\BalanceManagement.Data\BalanceManagement.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Service\" />
-    <Folder Include="IService\" />
-  </ItemGroup>
-
 </Project>
