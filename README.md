@@ -11,11 +11,10 @@ fullstack-owner-property-management
 └── BalanceManagement.Test --> Test
 ```
 ## Getting started.
-1. Sql Server. Crear la base de datos: BalanceManagement. El connectionstring  está configurado para una base de datos local(versión Developer)con windows Authentication
+1. Sql Server. Crear la base de datos: BalanceManagement. El connectionstring  está configurado para una base de datos local(versión Developer)con windows Authentication.El connectionstring debe ser cambiado en el archivo: appsettings.json para que la api funcione y en la clase DesignTimeDbContextFactory  para que las migraciones funciones.
 ```
 "Server=.\\;Database=BalanceManagement;Trusted_Connection=True;"
 ```
-El connectionstring debe ser cambiado en el archivo: appsettings.json para que la api funcione y en la clase DesignTimeDbContextFactory  para que las migraciones funciones.
 2. Migrations. Establecer el proyecto BalanceManagement.Data a por defecto: "Set as startup project" y lanzar el comando Updata-Database desde Package Manager Console. En el Package Manager Console, debe estar seleccionado el proyecto BalanceManagement.Data.
 4. Establecer el proyecto BalanceManagement.Api a "Set as startup project" y lanzar la aplicación.
 5. En el repositorio hay una carpeta con el nombre Postman. Aquí están todos los end point de la api. También se pueden ver con swagger.
