@@ -44,7 +44,7 @@ namespace BalanceManagement.Api.Controllers
         [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> UpdateAsync(UserDto user)
         {
-            if (user.Id != GetUser() && GetRol()==Roles.User) return Forbid();
+            if (user.Id != GetUser() && GetRole()==Roles.User) return Forbid();
             if (await _userService.ExistsUser(user)) return Conflict("username exists");
             var result = await _userService.UpdateAsync(user);
             return result != null ? (IActionResult) Ok(result) : Conflict();
@@ -73,7 +73,7 @@ namespace BalanceManagement.Api.Controllers
         [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
-            if (id != GetUser() && GetRol() == Roles.User) return Forbid();
+            if (id != GetUser() && GetRole() == Roles.User) return Forbid();
             var result = await _userService.GetByIdAsync(id);
             return result != null ? (IActionResult) Ok(result) : NotFound();
         }

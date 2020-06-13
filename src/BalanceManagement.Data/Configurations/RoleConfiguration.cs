@@ -1,5 +1,4 @@
-﻿using System;
-using BalanceManagement.Data.Entities;
+﻿using BalanceManagement.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

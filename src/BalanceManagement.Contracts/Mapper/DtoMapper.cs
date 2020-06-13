@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using BalanceManagement.Contracts.Dtos;
 using BalanceManagement.Contracts.Dtos.Accounts;
 using BalanceManagement.Contracts.Dtos.Users;
 using BalanceManagement.Data.Entities;
-using BalanceManagement.Data.Types;
 
 namespace BalanceManagement.Contracts.Mapper
 {
@@ -22,7 +20,6 @@ namespace BalanceManagement.Contracts.Mapper
             //CreateMap<Account, AccountDetailsDto>()
             //    .ForMember(f=>f.AccountBalances, map=>map.MapFrom(m=>m.AccountBalances));
             CreateMap<AccountBalance, AccountBalanceDto>();
-
             CreateMap<ModifyBalanceDto, AccountBalance>(); ;
         }
     }

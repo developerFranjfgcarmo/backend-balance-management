@@ -14,11 +14,11 @@ namespace BalanceManagement.Api.Controllers
             return userId;
         }
 
-        protected Roles GetRol()
+        protected Roles GetRole()
         {
-           var currentRol= HttpContext.Request.HttpContext.User.Claims.FirstOrDefault(f =>
+           var currentRole= HttpContext.Request.HttpContext.User.Claims.FirstOrDefault(f =>
                 f.Type == ClaimsIdentity.DefaultRoleClaimType);
-           var rol = (Roles)Enum.Parse(typeof(Roles), currentRol.Value, true);
+           var rol = (Roles)Enum.Parse(typeof(Roles), currentRole.Value, true);
            return rol;
         }
     }

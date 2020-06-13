@@ -32,7 +32,7 @@ namespace BalanceManagement.Api.Controllers
         [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> AddAsync(AccountDto account)
         {
-            if (account.Id != GetUser() && GetRol() == Roles.User) return Forbid();
+            if (account.Id != GetUser() && GetRole() == Roles.User) return Forbid();
             var result = await _accountService.AddAsync(account);
             return result != null ? (IActionResult) Ok(result) : Conflict();
         }
@@ -46,7 +46,7 @@ namespace BalanceManagement.Api.Controllers
         [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> UpdateAsync(AccountDto account)
         {
-            if (account.Id != GetUser() && GetRol() == Roles.User) return Forbid();
+            if (account.Id != GetUser() && GetRole() == Roles.User) return Forbid();
             var result = await _accountService.UpdateAsync(account);
             return result != null ? (IActionResult) Ok(result) : Conflict();
         }
@@ -66,7 +66,7 @@ namespace BalanceManagement.Api.Controllers
         }
 
         /// <summary>
-        /// Get All the accounts
+        /// Get All user accounts and all accounts if your are an admin user
         /// </summary>
         /// <param name="filter">paging filter</param>
         /// <returns></returns>
@@ -75,7 +75,7 @@ namespace BalanceManagement.Api.Controllers
         public async Task<IActionResult> GetListAsync([FromQuery] PagedFilter filter)
         {
             var userId = (int?) null;
-            if (GetRol() == Roles.User)
+            if (GetRole() == Roles.User)
             {
                 userId = GetUser();
             }
@@ -94,12 +94,13 @@ namespace BalanceManagement.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("{id}/balance")]
-        [Authorize(Roles = nameof(Roles.User))]
+        [Authorize(Roles ="User,Admin")]
         public async Task<IActionResult> GetBalanceByAccountAsync(int id, [FromQuery] PagedFilter filter)
         {
-            if(!await _accountService.IsOwnerAccount(GetUser(), id))
-                return Conflict("The user doesn`t own of this account");
-            var accountFilter = new AccountFilter{ AccountId = id, Page = filter.Page, Take = filter.Take, UserId = GetUser()};
+            if(GetRole()==Roles.User && !await _accountService.IsOwnerAccount(GetUser(), id))
+                return Forbid();
+            var userId = GetRole() == Roles.User ? GetUser() : (int?)null;
+            var accountFilter = new AccountFilter{ AccountId = id, Page = filter.Page, Take = filter.Take, UserId = userId };
             var result = await _accountService.GetBalanceByAccountAsync(accountFilter);
             return result.Items.Any() ? (IActionResult)Ok(result) : NotFound();
         }
@@ -115,7 +116,7 @@ namespace BalanceManagement.Api.Controllers
         [Authorize(Roles = nameof(Roles.Admin))]
         public async Task<IActionResult> AddBalanceAsync(int id, ModifyBalanceDto modifyBalance)
         {
-            if (!await IsOwnerAccount(modifyBalance)) return Conflict("The user doesn`t own of this account");
+            if (!await IsOwnerAccount(modifyBalance)) return Forbid();
 
             modifyBalance.AccountId = id;
             modifyBalance.Amount = Math.Abs(modifyBalance.Amount);
@@ -134,8 +135,7 @@ namespace BalanceManagement.Api.Controllers
         [Authorize(Roles = nameof(Roles.Admin))]
         public async Task<IActionResult> RemoveBalanceAsync(int id, ModifyBalanceDto modifyBalance)
         {
-            if (!await IsOwnerAccount(modifyBalance)) return Conflict("The user doesn`t own of this account");
-
+            if (!await IsOwnerAccount(modifyBalance)) return Forbid();
             modifyBalance.AccountId = id;
             modifyBalance.Amount = -Math.Abs(modifyBalance.Amount);
             var result = await _accountService.ModifyBalanceAsync(modifyBalance);
@@ -144,9 +144,9 @@ namespace BalanceManagement.Api.Controllers
 
         private async Task<bool> IsOwnerAccount(ModifyBalanceDto modifyBalance)
         {
-            var userId = GetRol() == Roles.User ? GetUser() : modifyBalance.userId;
-            var isOwnner = !await _accountService.IsOwnerAccount(userId, modifyBalance.AccountId);
-            return !(GetRol() == Roles.User && !isOwnner || GetRol() == Roles.Admin && !isOwnner);
+            var userId = GetRole() == Roles.User ? GetUser() : modifyBalance.UserId;
+            var isOwnner = await _accountService.IsOwnerAccount(userId, modifyBalance.AccountId);
+            return !(GetRole() == Roles.User && !isOwnner || GetRole() == Roles.Admin && !isOwnner);
         }
 
         #endregion

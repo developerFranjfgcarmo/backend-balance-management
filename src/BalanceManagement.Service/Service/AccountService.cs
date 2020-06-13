@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BalanceManagement.Service.Service
 {
-    public class AccountService:ServiceBase, IAccountService
+    public class AccountService : ServiceBase, IAccountService
     {
         public AccountService(IBalanceManagementDbContext balanceManagementDbContext) : base(balanceManagementDbContext)
         {
@@ -44,29 +44,29 @@ namespace BalanceManagement.Service.Service
             user.IsDeleted = true;
             return await SaveChangesAsync();
         }
-        
+
         public async Task<PagedCollection<AccountBalanceDto>> GetBalanceByAccountAsync(AccountFilter accountFilter)
         {
             var pagedCollection = new PagedCollection<AccountBalanceDto>
             {
-               Items = await (from a in BalanceManagementDbContext.Accounts
-                   join ab in BalanceManagementDbContext.AccountBalances on a.Id equals ab.AccountId
-                   join u in BalanceManagementDbContext.Users on ab.TransferredByUser equals u.Id into uab
-                   from x in uab.DefaultIfEmpty()
-                              orderby ab.Id descending 
-                   where a.UserId == accountFilter.UserId && !a.IsDeleted && a.Id == accountFilter.AccountId
-                   select new AccountBalanceDto
-                   {
-                       Id = ab.Id,
-                       TransferredByUser = $"{x.FirstName} {x.Surname}",
-                       Total = ab.Total,
-                       Description = ab.Description,
-                       TransferDate = ab.TransferDate,
-                       Amount = ab.Amount
+                Items = await (from a in BalanceManagementDbContext.Accounts
+                    join ab in BalanceManagementDbContext.AccountBalances on a.Id equals ab.AccountId
+                    join u in BalanceManagementDbContext.Users on ab.TransferredByUser equals u.Id into uab
+                    from x in uab.DefaultIfEmpty()
+                    orderby ab.Id descending
+                    where a.UserId == (accountFilter.UserId ?? a.UserId) && !a.IsDeleted &&
+                          a.Id == accountFilter.AccountId
+                    select new AccountBalanceDto
+                    {
+                        Id = ab.Id,
+                        TransferredByUser = $"{x.FirstName} {x.Surname}",
+                        Total = ab.Total,
+                        Description = ab.Description,
+                        TransferDate = ab.TransferDate,
+                        Amount = ab.Amount
+                    }).Skip(accountFilter.Page * accountFilter.Take).Take(accountFilter.Take).ToListAsync(),
 
-                   }).Skip(accountFilter.Page * accountFilter.Take).Take(accountFilter.Take).ToListAsync(),
-
-                    Total = await BalanceManagementDbContext.AccountBalances.CountAsync(c =>
+                Total = await BalanceManagementDbContext.AccountBalances.CountAsync(c =>
                     c.AccountId == accountFilter.AccountId)
             };
 
@@ -75,7 +75,9 @@ namespace BalanceManagement.Service.Service
 
         public async Task<bool> ModifyBalanceAsync(ModifyBalanceDto modifyBalance)
         {
-            var lastTotal = await BalanceManagementDbContext.AccountBalances.OrderByDescending(m => m.Id).Select(s=>s.Total).FirstOrDefaultAsync();
+            var lastTotal = await BalanceManagementDbContext.AccountBalances
+                .Where(w => w.AccountId == modifyBalance.AccountId).OrderByDescending(m => m.Id)
+                .Select(s => s.Total).FirstOrDefaultAsync();
             var balance = modifyBalance.MapTo<AccountBalance>();
             balance.Total = lastTotal + modifyBalance.Amount;
             balance.TransferDate = DateTime.Now;
@@ -90,7 +92,8 @@ namespace BalanceManagement.Service.Service
 
         public async Task<bool> IsOwnerAccount(int userId, int accountId)
         {
-            return await BalanceManagementDbContext.Accounts.CountAsync(c => c.UserId == userId && c.Id== accountId) > 0;
+            return await BalanceManagementDbContext.Accounts
+                       .CountAsync(c => c.UserId == userId && c.Id == accountId) >0;
         }
 
         public async Task<PagedCollection<AccountDto>> GetListAsync(int? userId, PagedFilter pagedFilter)
@@ -110,6 +113,5 @@ namespace BalanceManagement.Service.Service
         {
             return await BalanceManagementDbContext.Accounts.FirstOrDefaultAsync(w => w.Id == id && !w.IsDeleted);
         }
-
     }
 }

@@ -33,7 +33,6 @@ namespace BalanceManagement.Service.Service
             var entity = await BalanceManagementDbContext.Users.AddAsync(user.MapTo<User>());
             await SaveChangesAsync();
             return entity.Entity.MapTo<UserDto>();
-
         }
 
         public async Task<UserDto> UpdateAsync(UserDto user)

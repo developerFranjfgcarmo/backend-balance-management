@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BalanceManagement.Contracts.Dtos;
 using BalanceManagement.Contracts.Dtos.Filter;
 using BalanceManagement.Contracts.Dtos.Users;

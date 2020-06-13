@@ -2,7 +2,7 @@
 {
     public class AccountFilter:PagedFilter
     {
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public int AccountId { get; set; }
     }
 }
