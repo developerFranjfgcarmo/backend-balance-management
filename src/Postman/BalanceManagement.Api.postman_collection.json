@@ -274,6 +274,51 @@
 					"response": []
 				},
 				{
+					"name": "Get All accounts of a user. User and Admin Rol Copy",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44353/api/account/user/5",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44353",
+							"path": [
+								"api",
+								"account",
+								"user",
+								"5"
+							]
+						},
+						"description": "Add User"
+					},
+					"response": []
+				},
+				{
 					"name": "Add Account. User and Admin  Role",
 					"request": {
 						"auth": {
