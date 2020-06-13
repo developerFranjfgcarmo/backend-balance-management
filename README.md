@@ -1,31 +1,28 @@
 # Balance Management
 
-## Structure
+## Estructura
 
 ```
 fullstack-owner-property-management
 ├── BalanceManagement.Api --> Web Api.
-├── BalanceManagement.Contracts --> Contracts of The WebApi
-├── BalanceManagement.Data --> Persistence Layers
-├── BalanceManagement.Service --> Logic and access to data
+├── BalanceManagement.Contracts --> Contratos con la  WebApi
+├── BalanceManagement.Data --> Capa de persistencia a datos.
+├── BalanceManagement.Service --> Servicios
 └── BalanceManagement.Test --> Test
 ```
 ## Getting started.
-1. Sql Server. Create the database: BalanceManagement. The connectionstring is configured for a instance of local Sql Server:"" and with windows Authentication
+1. Sql Server. Crear la base de datos: BalanceManagement. El connectionstring  está configurado para una base de datos local(versión Developer)con windows Authentication
 ```
 "Server=.\\;Database=BalanceManagement;Trusted_Connection=True;"
 ```
-These settings must be changed in the file: appsettings.json for the application to work and in the DesignTimeDbContextFactory  class for migrations to work too.
-
-2. Migrations. Set the project BalanceManagement.Data and run the command Updata-Database from Package Manager Console.
-4. Set the project OwnerPropertyManagement.Api and run the project.
-5.Folder: Postman. Create a user. This end point is public. Roles
-  Admin=1
-  User=2
-  
- 5.2. Login with the new user.
+El connectionstring debe ser cambiado en el archivo: appsettings.json para que la api funcione y en la clase DesignTimeDbContextFactory  para que las migraciones funciones.
+2. Migrations. Establecer el proyecto BalanceManagement.Data a por defecto: "Set as startup project" y lanzar el comando Updata-Database desde Package Manager Console. En el Package Manager Console, debe estar seleccionado el proyecto BalanceManagement.Data.
+4. Establecer el proyecto BalanceManagement.Api a "Set as startup project" y lanzar la aplicación.
+5. En el repositorio hay una carpeta con el nombre Postman. Aquí están todos los end point de la api. También se pueden ver con swagger.
+6. Crear un usuario con el método: "./api/user". Hay dos tipos de usuario:Admin=1 y User=2. Este método es público.
+7. Una vez creado los usuario hacer login: "api/login/authenticate"
+8. El token está establecido como una variable local.
  ![](src/images/token.PNG)
- 
 
 ## How it work
 Asp.Net core:
@@ -33,7 +30,12 @@ Asp.Net core:
 - SeriLog.
 - Automapper.
 - Entity Framework Core.
-- Xunit
-- FluentValidation. Api contract validation
-- Sqlite.To test EF core.
+- Xunit. Test
+- FluentValidation. Validación de los contratos.
+- Sqlite.Test con EF core.
 - Swagger. End points: https://localhost:44311/swagger/index.html
+
+## Resumen.
+
+- He creado las secciones "/User/" y "/account/". Cada una de las acciones de estos controladores, están securizada para el Rol que corresponda: Admin o User. Además en algunos Action, he establecido verificaciones, por ejemplo que el usuario sólo pueda acceder a sus cuentas.
+- He documentado un poco la api con swagger, el código no lo he visto necesario, porque no hay ningún proceso que lo requiera. Siempre intento poner un 
