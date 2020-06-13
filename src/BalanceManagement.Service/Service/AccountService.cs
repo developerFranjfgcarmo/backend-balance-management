@@ -91,7 +91,12 @@ namespace BalanceManagement.Service.Service
             await BalanceManagementDbContext.AccountBalances.AddAsync(balance);
             return await SaveChangesAsync();
         }
-
+        /// <summary>
+        /// This methods allow transfer balance to other account.
+        /// The balance must be updated in the both account.
+        /// </summary>
+        /// <param name="balanceTransfer">transfer data</param>
+        /// <returns></returns>
         public async Task<bool> BalanceTransferToUserAsync(BalanceTransferDto balanceTransfer)
         {
             var targetUser = await BalanceManagementDbContext.Users.AsNoTracking().FirstOrDefaultAsync(f => f.UserName == balanceTransfer.UserTarget);

@@ -48,7 +48,12 @@ namespace BalanceManagement.Service.Service
             await SaveChangesAsync();
             return newUser.MapTo<UserDto>();
         }
-
+        /// <summary>
+        /// Delete a user and his accounts.
+        /// This process is in a transaction to avoid corrupted data.
+        /// </summary>
+        /// <param name="id">User Id</param>
+        /// <returns></returns>
         public async Task<bool> DeleteAsync(int id)
         {
             try
