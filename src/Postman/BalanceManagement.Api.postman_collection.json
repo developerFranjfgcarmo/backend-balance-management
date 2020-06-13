@@ -290,7 +290,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"Cuenta 6\",\r\n  \"userId\":5\r\n}",
+							"raw": "{\r\n  \"name\": \"Cuenta user 6\",\r\n  \"userId\":6\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -528,6 +528,48 @@
 								"account",
 								"6",
 								"add-balance"
+							]
+						},
+						"description": "Add User"
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer balance to other user. User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Amount\": 50,\r\n  \"AccountIdTarget\":7,\r\n  \"UserTarget\":\"Franjfgcarmo17\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44353/api/account/6/transfer-to-user",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44353",
+							"path": [
+								"api",
+								"account",
+								"6",
+								"transfer-to-user"
 							]
 						},
 						"description": "Add User"
