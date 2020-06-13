@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace BalanceManagement.Api.Middleware
 {
@@ -36,7 +37,7 @@ namespace BalanceManagement.Api.Middleware
             });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = statusCode;
-           // Log.Fatal(exception, "");
+            Log.Fatal(exception, "");
             return context.Response.WriteAsync(result);
         }
     }
