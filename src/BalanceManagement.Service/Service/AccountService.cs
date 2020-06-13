@@ -38,6 +38,13 @@ namespace BalanceManagement.Service.Service
             return newAccount.MapTo<AccountDto>();
         }
 
+        public async Task<IEnumerable<AccountDto>> GetAccountsByUserIdAsync(int userId)
+        {
+            var accounts = await BalanceManagementDbContext.Accounts.AsNoTracking().Where(w => w.UserId == userId)
+                .ToListAsync();
+            return accounts.MapTo<IEnumerable<AccountDto>>();
+        }
+
         public async Task<bool> DeleteAsync(int id)
         {
             var user = await GetEntityByIdAsync(id);
@@ -111,10 +118,10 @@ namespace BalanceManagement.Service.Service
             }
             catch (Exception)
             {
-                return await Task.FromResult(false); ;
+                return await Task.FromResult(false); 
             }
 
-            return await Task.FromResult(true); ;
+            return await Task.FromResult(true); 
         }
 
         public async Task<bool> IsOwnerAccountAsync(int userId, int accountId)

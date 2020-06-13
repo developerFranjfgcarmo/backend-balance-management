@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,8 +16,10 @@ namespace BalanceManagement.Service.Service
 {
     public class UserService:ServiceBase, IUserService
     {
-        public UserService(IBalanceManagementDbContext balanceManagementDbContext) : base(balanceManagementDbContext)
+        private readonly IAccountService _accountService;
+        public UserService(IBalanceManagementDbContext balanceManagementDbContext, IAccountService accountService) : base(balanceManagementDbContext)
         {
+            _accountService = accountService;
         }
 
         public async Task<UserDto> Authenticate(string userName, string password)
@@ -48,9 +51,24 @@ namespace BalanceManagement.Service.Service
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var user = await GetEntityByIdAsync(id);
-            user.IsDeleted = true;
-            return await SaveChangesAsync();
+            try
+            {
+                await using var transaction = await BalanceManagementDbContext.Database.BeginTransactionAsync();
+                var user = await GetEntityByIdAsync(id);
+                user.IsDeleted = true;
+                await SaveChangesAsync();
+                var accounts =await _accountService.GetAccountsByUserIdAsync(id);
+                foreach (var account in accounts)
+                {
+                    await _accountService.DeleteAsync(account.Id);
+                }
+                await transaction.CommitAsync();
+            }
+            catch (Exception e)
+            {
+                return await Task.FromResult(false); ;
+            }
+            return await Task.FromResult(true); ;
         }
 
         public async Task<UserDto> GetByIdAsync(int id)
