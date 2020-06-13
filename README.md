@@ -10,6 +10,37 @@ fullstack-owner-property-management
 ├── BalanceManagement.Service --> Servicios
 └── BalanceManagement.Test --> Test
 ```
+
+### BalanceManagement.Api
+```
+├── Auth --> Servicio para generar la Autenticacion del usuario
+├── Controllers
+├── Extensions --> Metódo de extensión para registrar Servicios en la clase Startup
+├── Filters --> Filtro que se encarga de validar los Dtos.
+├── Middleware --> Middleware para capturar las excepcion.
+└── Validator --> Rules de FluentValidations
+```
+
+### BalanceManagement.Contracts
+```
+├── Dtos
+└── Mapper --> Configuración de automapper y algunos métodos extensión.
+```
+
+### BalanceManagement.Data
+```
+├── Configurations --> Configuraciones de las entidadesde EF con Fluent Api
+├── Context. Contexto de EF. También está la clase DesignTimeDbContextFactory que permite lanzar las migraciones.
+├── Entities 
+├── Extensions --> Metódos de extensión para cargar las configuraciones de las entidades y los seeds
+├── Migrations
+└── Types. Enum con los Roles
+```
+### BalanceManagement.Service
+```
+├── IService --> Contratos
+└── Service--> Implementaciones de los servicios.
+```
 ## Getting started.
 1. Sql Server. Crear la base de datos: BalanceManagement. El connectionstring  está configurado para una base de datos local(versión Developer)con windows Authentication.El connectionstring debe ser cambiado en el archivo: appsettings.json para que la api funcione y en la clase DesignTimeDbContextFactory  para que las migraciones funciones.
 ```
