@@ -37,4 +37,4 @@ Asp.Net core:
 ## Resumen.
 
 - He creado las secciones "/User/" y "/account/". Cada una de las acciones de estos controladores, están securizada para el Rol que corresponda: Admin o User. Además en algunos Action, he establecido verificaciones, por ejemplo que el usuario sólo pueda acceder a sus cuentas.
-- He documentado un poco la api con swagger, el código no lo he visto necesario, porque no hay ningún proceso que lo requiera. Siempre intento poner un naming que aporte información o que me diga cual es su finalidad.
+- He documentado un poco la api con swagger, el código no lo he visto necesario, porque no hay ningún proceso que lo requiera. Siempre intento poner un naming que aporte información o que me diga cual es su finalidad. 
