@@ -10,6 +10,7 @@ namespace BalanceManagement.Data.Configurations
         {
             builder.ToTable("User");
             builder.HasIndex(i=>i.UserName);
+            builder.Property(p => p.UserName).HasMaxLength(50);
             builder.Property(p => p.Password).IsRequired().HasMaxLength(250);
             builder.Property(p => p.FirstName).HasMaxLength(50).IsRequired();
             builder.Property(p => p.Surname).HasMaxLength(50);
