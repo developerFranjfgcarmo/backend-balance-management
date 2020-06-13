@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using BalanceManagement.Contracts.Dtos;
 using BalanceManagement.Contracts.Dtos.Accounts;
 using BalanceManagement.Contracts.Dtos.Filter;
 using BalanceManagement.Data.Types;
 using BalanceManagement.Service.IService;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
 
@@ -28,6 +31,12 @@ namespace BalanceManagement.Api.Controllers
         /// </summary>
         /// <param name="account">>Account to add</param>
         /// <returns></returns>
+        /// <response code="200">Account created successfully</response>
+        /// <response code="409">The account exists</response>
+        /// <response code="403">You don’t have permission to access this resource</response>
+        [ProducesResponseType(typeof(AccountDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [HttpPost]
         [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> AddAsync(AccountDto account)
@@ -42,6 +51,12 @@ namespace BalanceManagement.Api.Controllers
         /// </summary>
         /// <param name="account">Account to update</param>
         /// <returns></returns>
+        /// <response code="200">Account Updated successfully</response>
+        /// <response code="409">The account exists</response>
+        /// <response code="403">You don’t have permission to access this resource</response>
+        [ProducesResponseType(typeof(AccountDto),StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [HttpPut]
         [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> UpdateAsync(AccountDto account)
@@ -56,6 +71,10 @@ namespace BalanceManagement.Api.Controllers
         /// </summary>
         /// <param name="id">account id</param>
         /// <returns></returns>
+        /// <response code="200">Account deleted successfully</response>
+        /// <response code="404">The account does not exists</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete]
         [Route("{id}")]
         [Authorize(Roles = nameof(Roles.Admin))]
@@ -70,6 +89,11 @@ namespace BalanceManagement.Api.Controllers
         /// </summary>
         /// <param name="filter">paging filter</param>
         /// <returns></returns>
+        /// <response code="200">Get All user accounts </response>
+        /// <response code="404">There are not accounts</response>
+        [ProducesDefaultResponseType]
+        [ProducesResponseType(typeof(PagedCollection<AccountDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet]
         [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> GetListAsync([FromQuery] PagedFilter filter)
@@ -81,6 +105,27 @@ namespace BalanceManagement.Api.Controllers
             }
             var result = await _accountService.GetListAsync(userId,filter);
             return result.Items.Any() ? (IActionResult)Ok(result) : NotFound();
+        }
+        /// <summary>
+        /// Get the accounts of a user
+        /// </summary>
+        /// <param name="id">user id</param>
+        /// <returns></returns>
+        /// <response code="200">Get All accounts of a user</response>
+        /// <response code="404">There are not accounts</response>
+        /// <response code="403">You don’t have permission to access this resource</response>
+        [ProducesResponseType(typeof(IEnumerable<AccountDto>),StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [HttpGet]
+        [Route("user/{id}")]
+        [Authorize(Roles = "User,Admin")]
+        public async Task<IActionResult> GetAccountsByUserIdAsync(int id)
+        {
+            if (GetRole() == Roles.User && GetUser()!=id)
+                return Forbid();
+            var result = await _accountService.GetAccountsByUserIdAsync(id);
+            return result.Any() ? (IActionResult)Ok(result) : NotFound();
         }
         #endregion
 
