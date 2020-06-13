@@ -23,16 +23,22 @@ fullstack-owner-property-management
 8. El token está establecido como una variable local.
  ![](src/images/token.PNG)
 
+## Postman.
+Tiene cuatro carpeta:
+1. User. Gestión de Usuarios.
+2. Account. Gestión de cuentas
+3. Login.
+4. Balance. Permite añadir, eliminar o transferir balance a la cuenta de otro usuario.
 ## How it work
 Asp.Net core:
 - JWT authentication using ASP.NET Core JWT Bearer Authentication.
-- SeriLog.
+- SeriLog. Cuando se enta en desarrollo se muestra los log en la ventana de output, está configurado para que en otro entorno escriba a un log.
 - Automapper.
 - Entity Framework Core.
 - Xunit. Test
-- FluentValidation. Validación de los contratos.
+- FluentValidation. Validación de los contratos y también se documenta en swagger las validaciones.
 - Sqlite.Test con EF core.
-- Swagger. End points: https://localhost:44311/swagger/index.html
+- Swagger. End points: https://localhost:44353/swagger/index.html
 
 ## Resumen.
 
