@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using BalanceManagement.Contracts.Dtos;
 using BalanceManagement.Contracts.Dtos.Accounts;
 using BalanceManagement.Contracts.Dtos.Filter;
-using BalanceManagement.Contracts.Dtos.Users;
 using BalanceManagement.Contracts.Mapper;
 using BalanceManagement.Data.Context;
 using BalanceManagement.Data.Entities;
@@ -44,21 +44,33 @@ namespace BalanceManagement.Service.Service
             user.IsDeleted = true;
             return await SaveChangesAsync();
         }
-
-        public Task<AccountDto> GetByUserIdAsync(int id)
+        
+        public async Task<PagedCollection<AccountBalanceDto>> GetBalanceByAccountAsync(AccountFilter accountFilter)
         {
-            throw new NotImplementedException();
-        }
+            var pagedCollection = new PagedCollection<AccountBalanceDto>
+            {
+               Items = await (from a in BalanceManagementDbContext.Accounts
+                   join ab in BalanceManagementDbContext.AccountBalances on a.Id equals ab.AccountId
+                   join u in BalanceManagementDbContext.Users on ab.TransferredByUser equals u.Id into uab
+                   from x in uab.DefaultIfEmpty()
+                              orderby ab.Id descending 
+                   where a.UserId == accountFilter.UserId && !a.IsDeleted && a.Id == accountFilter.AccountId
+                   select new AccountBalanceDto
+                   {
+                       Id = ab.Id,
+                       TransferredByUser = $"{x.FirstName} {x.Surname}",
+                       Total = ab.Total,
+                       Description = ab.Description,
+                       TransferDate = ab.TransferDate,
+                       Amount = ab.Amount
 
-        public async Task<PagedCollection<AccountDetailsDto>> GetBalanceByAccountAsync(AccountFilter accountFilter)
-        {
-            var result = await BalanceManagementDbContext.Accounts.AsNoTracking().Where(w =>
-                    !w.IsDeleted && w.UserId == accountFilter.UserId && w.Id == accountFilter.AccountId)
-                .Include(i => i.AccountBalances).Skip(accountFilter.Page * accountFilter.Take).Take(accountFilter.Take)
-                .OrderBy(o => o.AccountBalances.OrderBy(oc => oc.Id)).ToListAsync();
-            var total = await BalanceManagementDbContext.AccountBalances.CountAsync(c =>
-                c.AccountId == accountFilter.AccountId);
-            throw new NotImplementedException();
+                   }).Skip(accountFilter.Page * accountFilter.Take).Take(accountFilter.Take).ToListAsync(),
+
+                    Total = await BalanceManagementDbContext.AccountBalances.CountAsync(c =>
+                    c.AccountId == accountFilter.AccountId)
+            };
+
+            return pagedCollection;
         }
 
         public async Task<bool> ModifyBalanceAsync(ModifyBalanceDto modifyBalance)
@@ -79,6 +91,19 @@ namespace BalanceManagement.Service.Service
         public async Task<bool> IsOwnerAccount(int userId, int accountId)
         {
             return await BalanceManagementDbContext.Accounts.CountAsync(c => c.UserId == userId && c.Id== accountId) > 0;
+        }
+
+        public async Task<PagedCollection<AccountDto>> GetListAsync(int? userId, PagedFilter pagedFilter)
+        {
+            var pagedCollection = new PagedCollection<AccountDto>
+            {
+                Items = (await BalanceManagementDbContext.Accounts
+                    .Where(w => !w.IsDeleted && w.UserId == (userId ?? w.UserId))
+                    .Skip(pagedFilter.Page * pagedFilter.Take)
+                    .Take(pagedFilter.Take).AsNoTracking().ToListAsync()).MapTo<List<AccountDto>>(),
+                Total = await BalanceManagementDbContext.Accounts.CountAsync(w => !w.IsDeleted)
+            };
+            return pagedCollection;
         }
 
         private async Task<Account> GetEntityByIdAsync(int id)

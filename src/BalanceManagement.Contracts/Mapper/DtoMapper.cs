@@ -19,10 +19,10 @@ namespace BalanceManagement.Contracts.Mapper
                 .ForMember(f=>f.Password,map=> map.Ignore());
             CreateMap<AccountDto, Account>();
             CreateMap<Account, AccountDto>();
-            CreateMap<Account, AccountDetailsDto>()
-                .ForMember(f=>f.AccountBalances, map=>map.MapFrom(m=>m.AccountBalances));
-            //CreateMap<AccountBalance, AccountBalanceDto>()
-            //    .IncludeBase<Account, AccountDetailsDto>();
+            //CreateMap<Account, AccountDetailsDto>()
+            //    .ForMember(f=>f.AccountBalances, map=>map.MapFrom(m=>m.AccountBalances));
+            CreateMap<AccountBalance, AccountBalanceDto>();
+
             CreateMap<ModifyBalanceDto, AccountBalance>(); ;
         }
     }

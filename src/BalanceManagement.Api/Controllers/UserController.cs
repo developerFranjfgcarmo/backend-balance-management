@@ -59,7 +59,7 @@ namespace BalanceManagement.Api.Controllers
         [Authorize(Roles = nameof(Roles.Admin))]
         public async Task<IActionResult> GetListAsync([FromQuery] PagedFilter filter)
         {
-            var result = await _userService.GetAllAsync(filter);
+            var result = await _userService.GetListAsync(filter);
             return result.Items.Any() ? (IActionResult) Ok(result) : NotFound();
         }
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BalanceManagement.Contracts.Dtos.Filter
+﻿namespace BalanceManagement.Contracts.Dtos.Filter
 {
     public class AccountFilter:PagedFilter
     {

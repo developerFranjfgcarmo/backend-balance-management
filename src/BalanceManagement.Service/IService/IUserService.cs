@@ -13,7 +13,7 @@ namespace BalanceManagement.Service.IService
         Task<UserDto> UpdateAsync(UserDto user);
         Task<bool> DeleteAsync(int id);
         Task<UserDto> GetByIdAsync(int id);
-        Task<PagedCollection<UserDto>> GetAllAsync (PagedFilter pagedFilter);
+        Task<PagedCollection<UserDto>> GetListAsync (PagedFilter pagedFilter);
         Task<bool> ExistsUser(UserDto user);
     }
 }

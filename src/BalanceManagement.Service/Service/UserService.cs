@@ -60,7 +60,7 @@ namespace BalanceManagement.Service.Service
             return owner.MapTo<UserDto>();
         }
 
-        public async Task<PagedCollection<UserDto>> GetAllAsync(PagedFilter pagedFilter)
+        public async Task<PagedCollection<UserDto>> GetListAsync(PagedFilter pagedFilter)
         {
             Debug.Assert(pagedFilter == null);
             var result = new PagedCollection<UserDto>();
