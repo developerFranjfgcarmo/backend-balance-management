@@ -4,14 +4,16 @@ using BalanceManagement.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BalanceManagement.Data.Migrations
 {
     [DbContext(typeof(BalanceManagementDbContext))]
-    partial class BalanceManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200613214603_added-maxlenght-to-username-table-User")]
+    partial class addedmaxlenghttousernametableUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
