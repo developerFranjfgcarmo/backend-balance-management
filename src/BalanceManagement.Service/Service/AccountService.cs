@@ -85,12 +85,39 @@ namespace BalanceManagement.Service.Service
             return await SaveChangesAsync();
         }
 
-        public Task<bool> BalanceTransferToUser(BalanceTransferDto balanceTransfer)
+        public async Task<bool> BalanceTransferToUserAsync(BalanceTransferDto balanceTransfer)
         {
-            throw new NotImplementedException();
+            var targetUser = await BalanceManagementDbContext.Users.AsNoTracking().FirstOrDefaultAsync(f => f.UserName == balanceTransfer.UserTarget);
+            var sourceUser = await BalanceManagementDbContext.Accounts.AsNoTracking()
+                .Where(w => w.Id == balanceTransfer.AccountId).Select(s => s.User).FirstOrDefaultAsync();
+            try
+            {
+                await using var transaction = await BalanceManagementDbContext.Database.BeginTransactionAsync();
+                await ModifyBalanceAsync(new ModifyBalanceDto
+                {
+                    AccountId = balanceTransfer.AccountId,
+                    Amount = -balanceTransfer.Amount,
+                    Description = $"Transfer to user: {balanceTransfer.UserTarget}",
+                    UserId = targetUser.Id
+                });
+                await ModifyBalanceAsync(new ModifyBalanceDto
+                {
+                    AccountId = balanceTransfer.AccountIdTarget,
+                    Amount = balanceTransfer.Amount,
+                    Description = $"Transfer from user: {sourceUser.UserName}",
+                    UserId = sourceUser.Id
+                });
+                await transaction.CommitAsync();
+            }
+            catch (Exception)
+            {
+                return await Task.FromResult(false); ;
+            }
+
+            return await Task.FromResult(true); ;
         }
 
-        public async Task<bool> IsOwnerAccount(int userId, int accountId)
+        public async Task<bool> IsOwnerAccountAsync(int userId, int accountId)
         {
             return await BalanceManagementDbContext.Accounts
                        .CountAsync(c => c.UserId == userId && c.Id == accountId) >0;

@@ -2,9 +2,9 @@
 {
     public class BalanceTransferDto
     {
-        public int UserId { get; set; }
-        public int AccountSource { get; set; }
+        public int AccountId { get; set; }
+        public int Amount { get; set; }
         public string UserTarget { get; set; }
-        public int AccountTarget { get; set; }
+        public int AccountIdTarget { get; set; }
     }
 }

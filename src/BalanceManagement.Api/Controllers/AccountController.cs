@@ -32,7 +32,7 @@ namespace BalanceManagement.Api.Controllers
         [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> AddAsync(AccountDto account)
         {
-            if (account.Id != GetUser() && GetRole() == Roles.User) return Forbid();
+            if (account.UserId != GetUser() && GetRole() == Roles.User) return Forbid();
             var result = await _accountService.AddAsync(account);
             return result != null ? (IActionResult) Ok(result) : Conflict();
         }
@@ -46,7 +46,7 @@ namespace BalanceManagement.Api.Controllers
         [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> UpdateAsync(AccountDto account)
         {
-            if (account.Id != GetUser() && GetRole() == Roles.User) return Forbid();
+            if (account.UserId != GetUser() && GetRole() == Roles.User) return Forbid();
             var result = await _accountService.UpdateAsync(account);
             return result != null ? (IActionResult) Ok(result) : Conflict();
         }
@@ -85,11 +85,30 @@ namespace BalanceManagement.Api.Controllers
         #endregion
 
         #region [Balance]
+        /// <summary>
+        /// Transfer balance to other user
+        /// </summary>
+        /// <param name="id">Id of the account</param>
+        /// <param name="balanceTransfer">Information about the transfer</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("{id}/transfer-to-user")]
+        [Authorize(Roles = nameof(Roles.User))]
+        public async Task<IActionResult> BalanceTransferToUserAsync(int id, BalanceTransferDto balanceTransfer)
+        {
+            if (GetRole() == Roles.User && !await _accountService.IsOwnerAccountAsync(GetUser(), id))
+                return Forbid();
+            if (id == balanceTransfer.AccountIdTarget)
+                return Conflict("The destination account must be different");
+            balanceTransfer.AccountId = id;
+            var result = await _accountService.BalanceTransferToUserAsync(balanceTransfer);
+            return result ? (IActionResult)Ok() : NotFound();
+        }
 
         /// <summary>
-        /// Get All the accounts
+        /// Get the balance of an account
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Id of the account</param>
         /// <param name="filter">paging filter</param>
         /// <returns></returns>
         [HttpGet]
@@ -97,7 +116,7 @@ namespace BalanceManagement.Api.Controllers
         [Authorize(Roles ="User,Admin")]
         public async Task<IActionResult> GetBalanceByAccountAsync(int id, [FromQuery] PagedFilter filter)
         {
-            if(GetRole()==Roles.User && !await _accountService.IsOwnerAccount(GetUser(), id))
+            if(GetRole()==Roles.User && !await _accountService.IsOwnerAccountAsync(GetUser(), id))
                 return Forbid();
             var userId = GetRole() == Roles.User ? GetUser() : (int?)null;
             var accountFilter = new AccountFilter{ AccountId = id, Page = filter.Page, Take = filter.Take, UserId = userId };
@@ -117,7 +136,6 @@ namespace BalanceManagement.Api.Controllers
         public async Task<IActionResult> AddBalanceAsync(int id, ModifyBalanceDto modifyBalance)
         {
             if (!await IsOwnerAccount(modifyBalance)) return Forbid();
-
             modifyBalance.AccountId = id;
             modifyBalance.Amount = Math.Abs(modifyBalance.Amount);
             var result = await _accountService.ModifyBalanceAsync(modifyBalance);
@@ -145,7 +163,7 @@ namespace BalanceManagement.Api.Controllers
         private async Task<bool> IsOwnerAccount(ModifyBalanceDto modifyBalance)
         {
             var userId = GetRole() == Roles.User ? GetUser() : modifyBalance.UserId;
-            var isOwnner = await _accountService.IsOwnerAccount(userId, modifyBalance.AccountId);
+            var isOwnner = await _accountService.IsOwnerAccountAsync(userId, modifyBalance.AccountId);
             return !(GetRole() == Roles.User && !isOwnner || GetRole() == Roles.Admin && !isOwnner);
         }
 
