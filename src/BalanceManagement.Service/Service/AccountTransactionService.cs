@@ -8,6 +8,7 @@ using BalanceManagement.Contracts.Dtos.Filter;
 using BalanceManagement.Contracts.Mapper;
 using BalanceManagement.Data.Context;
 using BalanceManagement.Data.Entities;
+using BalanceManagement.Service.Attributes;
 using BalanceManagement.Service.IService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -28,15 +29,16 @@ namespace BalanceManagement.Service.Service
         /// </summary>
         /// <param name="modifyBalance"></param>
         /// <returns></returns>
+        [TransactionAsync]
         public async Task<bool> ModifyBalanceAsync(ModifyBalanceDto modifyBalance)
         {
             try
             {
-                IDbContextTransaction transaction = null;
-                if (BalanceManagementDbContext.Database.CurrentTransaction == null)
-                {
-                    transaction = await BalanceManagementDbContext.Database.BeginTransactionAsync();
-                }
+                //IDbContextTransaction transaction = null;
+                //if (BalanceManagementDbContext.Database.CurrentTransaction == null)
+                //{
+                //    transaction = await BalanceManagementDbContext.Database.BeginTransactionAsync();
+                //}
 
                 var lastTotal = await BalanceManagementDbContext.AccountTransactions
                     .Where(w => w.AccountId == modifyBalance.AccountId).OrderByDescending(m => m.Id)
@@ -47,10 +49,10 @@ namespace BalanceManagement.Service.Service
                 await BalanceManagementDbContext.AccountTransactions.AddAsync(balance);
                 await SaveChangesAsync();
                 await UpdateBalanceOfUser(modifyBalance.UserId);
-                if (transaction != null)
-                {
-                    await transaction.CommitAsync();
-                }
+                //if (transaction != null)
+                //{
+                //    await transaction.CommitAsync();
+                //}
             }
             catch (Exception)
             {
@@ -71,6 +73,7 @@ namespace BalanceManagement.Service.Service
         /// </summary>
         /// <param name="balanceTransfer">transfer data</param>
         /// <returns></returns>
+       [TransactionAsync]
         public async Task<bool> BalanceTransferToUserAsync(BalanceTransferDto balanceTransfer)
         {
             var targetUser = await BalanceManagementDbContext.Users.AsNoTracking().FirstOrDefaultAsync(f => f.UserName == balanceTransfer.UserTarget);
@@ -78,7 +81,7 @@ namespace BalanceManagement.Service.Service
                 .Where(w => w.Id == balanceTransfer.AccountId).Select(s => s.User).FirstOrDefaultAsync();
             try
             {
-                await using var transaction = await BalanceManagementDbContext.Database.BeginTransactionAsync();
+               // await using var transaction = await BalanceManagementDbContext.Database.BeginTransactionAsync();
                 await ModifyBalanceAsync(new ModifyBalanceDto
                 {
                     AccountId = balanceTransfer.AccountId,
@@ -93,7 +96,7 @@ namespace BalanceManagement.Service.Service
                     Description = $"Transfer from user: {sourceUser.UserName}",
                     UserId = targetUser.Id
                 });
-                await transaction.CommitAsync();
+              //  await transaction.CommitAsync();
             }
             catch (Exception)
             {

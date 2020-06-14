@@ -9,6 +9,7 @@ using BalanceManagement.Contracts.Dtos.Users;
 using BalanceManagement.Contracts.Mapper;
 using BalanceManagement.Data.Context;
 using BalanceManagement.Data.Entities;
+using BalanceManagement.Service.Attributes;
 using BalanceManagement.Service.IService;
 using Microsoft.EntityFrameworkCore;
 
@@ -54,11 +55,11 @@ namespace BalanceManagement.Service.Service
         /// </summary>
         /// <param name="id">User Id</param>
         /// <returns></returns>
+        [TransactionAsync]
         public async Task<bool> DeleteAsync(int id)
         {
             try
             {
-                await using var transaction = await BalanceManagementDbContext.Database.BeginTransactionAsync();
                 var user = await BalanceManagementDbContext.Users.Include(i=>i.Accounts).FirstOrDefaultAsync(w => w.Id == id && !w.IsDeleted); ;
                 user.IsDeleted = true;
                 await SaveChangesAsync();
@@ -67,7 +68,6 @@ namespace BalanceManagement.Service.Service
                 {
                     await _accountService.DeleteAsync(account.Id);
                 }
-                await transaction.CommitAsync();
             }
             catch (Exception e)
             {
