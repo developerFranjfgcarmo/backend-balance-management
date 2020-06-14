@@ -42,7 +42,7 @@ fullstack-owner-property-management
 └── Service--> Implementaciones de los servicios.
 ```
 ## Getting started.
-1. Sql Server. Crear la base de datos: BalanceManagement. El connectionstring  está configurado para una base de datos local(versión Developer)con windows Authentication.El connectionstring debe ser cambiado en el archivo: appsettings.json para que la api funcione y en la clase DesignTimeDbContextFactory  para que las migraciones funciones.
+1. Sql Server. Crear la base de datos: BalanceManagement. El connectionstring  está configurado para una base de datos local(versión Developer)con windows Authentication.El connectionstring debe ser cambiado en el archivo: appsettings.json para que la api funcione y en la clase DesignTimeDbContextFactory  para lanzar las migraciones.
 ```
 "Server=.\\;Database=BalanceManagement;Trusted_Connection=True;"
 ```
