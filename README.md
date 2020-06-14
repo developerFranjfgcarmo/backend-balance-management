@@ -39,6 +39,7 @@ fullstack-owner-property-management
 ### BalanceManagement.Service
 ```
 ├── IService --> Contratos
+├── Attributes --> La clase TransactionAsyncAttribute, utiliza el paquete MrAdvice, el cual permite utilizar la programación orientada a aspectos.
 └── Service--> Implementaciones de los servicios.
 ```
 ### BalanceManagement.Test
