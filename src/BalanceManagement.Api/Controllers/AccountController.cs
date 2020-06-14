@@ -151,13 +151,13 @@ namespace BalanceManagement.Api.Controllers
         }
 
         /// <summary>
-        /// Get the balance of an account
+        /// Get the list of transactions for an account
         /// </summary>
         /// <param name="id">Id of the account</param>
         /// <param name="filter">paging filter</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("{id}/balance")]
+        [Route("{id}/transactions")]
         [Authorize(Roles ="User,Admin")]
         public async Task<IActionResult> GetBalanceByAccountAsync(int id, [FromQuery] PagedFilter filter)
         {
