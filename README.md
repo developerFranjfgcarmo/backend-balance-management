@@ -13,7 +13,7 @@ fullstack-owner-property-management
 
 ### BalanceManagement.Api
 ```
-├── Auth --> Servicio para generar la Autenticacion del usuario
+├── Auth --> Servicio para generar la Autenticación del usuario
 ├── Controllers
 ├── Extensions --> Metódo de extensión para registrar Servicios en la clase Startup
 ├── Filters --> Filtro que se encarga de validar los Dtos.
@@ -29,10 +29,10 @@ fullstack-owner-property-management
 
 ### BalanceManagement.Data
 ```
-├── Configurations --> Configuraciones de las entidadesde EF con Fluent Api
+├── Configurations --> Configuraciones de las entidades de EF con Fluent Api
 ├── Context. Contexto de EF. También está la clase DesignTimeDbContextFactory que permite lanzar las migraciones.
 ├── Entities 
-├── Extensions --> Metódos de extensión para cargar las configuraciones de las entidades y los seeds
+├── Extensions --> Métodos de extensión para cargar las configuraciones de las entidades y los seeds
 ├── Migrations
 └── Types. Enum con los Roles
 ```
@@ -45,7 +45,7 @@ fullstack-owner-property-management
 ### BalanceManagement.Test
 ```
 ├── Mocks --> La clase DatabaseFixture permite compartir la conexión de SqlLite con todos los test.
-└── Service--> Test. He añadido dos test para testear los servicio. Uno para añadir saldo a un usuario y otro para transferir saldo  a otro usuario.
+└── Service--> Test. He añadido dos test para testear los servicios. Uno para añadir saldo a un usuario y otro para transferir saldo  a otro usuario.
 ```
 ## Getting started.
 1. Sql Server. Crear la base de datos: BalanceManagement. El connectionstring  está configurado para una base de datos local(versión Developer)con **windows Authentication**.El connectionstring debe ser cambiado en el archivo: **appsettings.json** para que la api funcione y en la clase **DesignTimeDbContextFactory**  para lanzar las migraciones.
@@ -56,13 +56,13 @@ fullstack-owner-property-management
 4. Establecer el proyecto BalanceManagement.Api a **"Set as startup project"** y lanzar la aplicación.
 5. En el repositorio hay una carpeta con el nombre **Postman(BalanceManagement.Api.postman_collection.json)**. Aquí están todos los end point de la api. En el título de la petición, **indico los roles que pueden utilizarla**. También se pueden ver con swagger.
 6. Crear un usuario a través del end point: "./api/user". Hay dos tipos de usuario:Admin=1 y User=2. Este método es público. Se recomienda crar un usuario administrador y un usuario normal.
-7. Una vez creado los usuario hacer login en el siguiente end point: "api/login/authenticate"
+7. Una vez creado los usuarios hacer login en el siguiente end point: "api/login/authenticate"
 8. El token está establecido como una variable global en el postman. Se recomienda generar y guardar el token de los usuarios.
 
  ![](src/images/token.PNG)
 
 ## Postman.
-Tiene cuatro carpeta:
+Tiene cuatro carpetas:
 1. User. Gestión de Usuarios.
 2. Account. Gestión de cuentas
 3. Login.
@@ -82,4 +82,4 @@ Asp.Net core:
 ## Resumen.
 
 - He creado las secciones "/User/" y "/account/". Cada una de las acciones de estos controladores, están securizada para el Rol que corresponda: Admin y User o ambos. Además en algunos Action, he establecido verificaciones, por ejemplo que el usuario sólo pueda acceder a sus cuentas.
-- He documentado un poco la api con swagger. El código, sólo aquellos métodos que he visto que tienen alguna complejidad. Siempre intento poner un naming que aporte información o que me diga cual es su finalidad. 
+- He documentado un poco la api con swagger. El código, sólo aquellos métodos que he visto que tienen alguna complejidad. Siempre intento poner un naming que aporte información o que me diga cuál es su finalidad. 
