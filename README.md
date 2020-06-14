@@ -54,10 +54,10 @@ fullstack-owner-property-management
 ```
 2. Migrations. Establecer el proyecto BalanceManagement.Data a por defecto: "Set as startup project" y lanzar el comando Updata-Database desde Package Manager Console. En el Package Manager Console, debe estar seleccionado el proyecto BalanceManagement.Data.
 4. Establecer el proyecto BalanceManagement.Api a "Set as startup project" y lanzar la aplicación.
-5. En el repositorio hay una carpeta con el nombre Postman(BalanceManagement.Api.postman_collection.json). Aquí están todos los end point de la api. También se pueden ver con swagger.
-6. Crear un usuario con el método: "./api/user". Hay dos tipos de usuario:Admin=1 y User=2. Este método es público.
-7. Una vez creado los usuario hacer login: "api/login/authenticate"
-8. El token está establecido como una variable local.
+5. En el repositorio hay una carpeta con el nombre Postman(BalanceManagement.Api.postman_collection.json). Aquí están todos los end point de la api. En el título de la petición indico los roles que pueden utilizarla. También se pueden ver con swagger.
+6. Crear un usuario a través del end point: "./api/user". Hay dos tipos de usuario:Admin=1 y User=2. Este método es público. Se recomienda crar un usuario administrador y un usuario normal.
+7. Una vez creado los usuario hacer login en el siguiente end point: "api/login/authenticate"
+8. El token está establecido como una variable global en el postman. Se recomienda generar y guardar el token de los usuarios.
  ![](src/images/token.PNG)
 
 ## Postman.
@@ -66,6 +66,7 @@ Tiene cuatro carpeta:
 2. Account. Gestión de cuentas
 3. Login.
 4. Balance. Permite añadir, eliminar o transferir balance a la cuenta de otro usuario.
+
 ## How it work
 Asp.Net core:
 - JWT authentication using ASP.NET Core JWT Bearer Authentication.
