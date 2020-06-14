@@ -5,6 +5,7 @@ using BalanceManagement.Contracts.Dtos.Users;
 using BalanceManagement.Data.Types;
 using BalanceManagement.Service.IService;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BalanceManagement.Api.Controllers
@@ -26,6 +27,10 @@ namespace BalanceManagement.Api.Controllers
         /// </summary>
         /// <param name="user">>User to add</param>
         /// <returns></returns>
+        /// <response code="200">User created successfully</response>
+        /// <response code="409">The user exists</response>
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> AddAsync(UserDto user)
@@ -40,6 +45,12 @@ namespace BalanceManagement.Api.Controllers
         /// </summary>
         /// <param name="user">User to update</param>
         /// <returns></returns>
+        /// <response code="200">User updated successfully</response>
+        /// <response code="409">The user exists</response>
+        /// <response code="403">You don’t have permission to access this resource</response>
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [HttpPut]
         [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> UpdateAsync(UserDto user)
@@ -55,6 +66,10 @@ namespace BalanceManagement.Api.Controllers
         /// </summary>
         /// <param name="filter">paging filter</param>
         /// <returns></returns>
+        /// <response code="200">User updated successfully</response>
+        /// <response code="404">There are not users</response>
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet]
         [Authorize(Roles = nameof(Roles.Admin))]
         public async Task<IActionResult> GetListAsync([FromQuery] PagedFilter filter)
@@ -68,6 +83,12 @@ namespace BalanceManagement.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// <response code="200">User updated successfully</response>
+        /// <response code="404">The user does not exist</response>
+        /// <response code="403">You don’t have permission to access this resource</response>
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [HttpGet]
         [Route("{id}")]
         [Authorize(Roles = "User,Admin")]
@@ -83,6 +104,10 @@ namespace BalanceManagement.Api.Controllers
         /// </summary>
         /// <param name="id">user id</param>
         /// <returns></returns>
+        /// <response code="200">User updated successfully</response>
+        /// <response code="404">The user does not exist</response>
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete]
         [Route("{id}")]
         [Authorize(Roles = nameof(Roles.Admin))]
