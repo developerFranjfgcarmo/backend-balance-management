@@ -43,7 +43,7 @@ fullstack-owner-property-management
 ```
 ### BalanceManagement.Test
 ```
-├── Mocks --> Contratos
+├── Mocks --> La clase DatabaseFixture permite compartir la conexión de SqlLite con todos los test.
 └── Service--> Test. He añadido dos test para testear los servicio. Uno para añadir saldo a un usuario y otro para transferir saldo  a otro usuario.
 ```
 ## Getting started.
