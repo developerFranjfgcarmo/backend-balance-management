@@ -483,7 +483,7 @@
 			"name": "Balance",
 			"item": [
 				{
-					"name": "Get balance by Account. User and Admin Role",
+					"name": "Get transactions by Account. User and Admin Role",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -510,7 +510,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:44353/api/account/6/balance?take=5&page=0",
+							"raw": "https://localhost:44353/api/account/6/transactions?take=5&page=0",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -520,7 +520,7 @@
 								"api",
 								"account",
 								"6",
-								"balance"
+								"transactions"
 							],
 							"query": [
 								{
