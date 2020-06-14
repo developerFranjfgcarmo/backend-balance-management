@@ -39,19 +39,25 @@ fullstack-owner-property-management
 ### BalanceManagement.Service
 ```
 ├── IService --> Contratos
+├── Attributes --> La clase TransactionAsyncAttribute, utiliza el paquete MrAdvice, el cual permite utilizar la programación orientada a aspectos.
 └── Service--> Implementaciones de los servicios.
 ```
+### BalanceManagement.Test
+```
+├── Mocks --> La clase DatabaseFixture permite compartir la conexión de SqlLite con todos los test.
+└── Service--> Test. He añadido dos test para testear los servicio. Uno para añadir saldo a un usuario y otro para transferir saldo  a otro usuario.
+```
 ## Getting started.
-1. Sql Server. Crear la base de datos: BalanceManagement. El connectionstring  está configurado para una base de datos local(versión Developer)con windows Authentication.El connectionstring debe ser cambiado en el archivo: appsettings.json para que la api funcione y en la clase DesignTimeDbContextFactory  para que las migraciones funciones.
+1. Sql Server. Crear la base de datos: BalanceManagement. El connectionstring  está configurado para una base de datos local(versión Developer)con windows Authentication.El connectionstring debe ser cambiado en el archivo: appsettings.json para que la api funcione y en la clase DesignTimeDbContextFactory  para lanzar las migraciones.
 ```
 "Server=.\\;Database=BalanceManagement;Trusted_Connection=True;"
 ```
 2. Migrations. Establecer el proyecto BalanceManagement.Data a por defecto: "Set as startup project" y lanzar el comando Updata-Database desde Package Manager Console. En el Package Manager Console, debe estar seleccionado el proyecto BalanceManagement.Data.
 4. Establecer el proyecto BalanceManagement.Api a "Set as startup project" y lanzar la aplicación.
-5. En el repositorio hay una carpeta con el nombre Postman(BalanceManagement.Api.postman_collection.json). Aquí están todos los end point de la api. También se pueden ver con swagger.
-6. Crear un usuario con el método: "./api/user". Hay dos tipos de usuario:Admin=1 y User=2. Este método es público.
-7. Una vez creado los usuario hacer login: "api/login/authenticate"
-8. El token está establecido como una variable local.
+5. En el repositorio hay una carpeta con el nombre Postman(BalanceManagement.Api.postman_collection.json). Aquí están todos los end point de la api. En el título de la petición indico los roles que pueden utilizarla. También se pueden ver con swagger.
+6. Crear un usuario a través del end point: "./api/user". Hay dos tipos de usuario:Admin=1 y User=2. Este método es público. Se recomienda crar un usuario administrador y un usuario normal.
+7. Una vez creado los usuario hacer login en el siguiente end point: "api/login/authenticate"
+8. El token está establecido como una variable global en el postman. Se recomienda generar y guardar el token de los usuarios.
  ![](src/images/token.PNG)
 
 ## Postman.
@@ -60,6 +66,7 @@ Tiene cuatro carpeta:
 2. Account. Gestión de cuentas
 3. Login.
 4. Balance. Permite añadir, eliminar o transferir balance a la cuenta de otro usuario.
+
 ## How it work
 Asp.Net core:
 - JWT authentication using ASP.NET Core JWT Bearer Authentication.
@@ -74,4 +81,4 @@ Asp.Net core:
 ## Resumen.
 
 - He creado las secciones "/User/" y "/account/". Cada una de las acciones de estos controladores, están securizada para el Rol que corresponda: Admin o User. Además en algunos Action, he establecido verificaciones, por ejemplo que el usuario sólo pueda acceder a sus cuentas.
-- He documentado un poco la api con swagger, el código no lo he visto necesario, porque no hay ningún proceso que lo requiera. Siempre intento poner un naming que aporte información o que me diga cual es su finalidad. 
+- He documentado un poco la api con swagger. El código, sólo aquellos métodos que he visto que tienen alguna complejidad. Siempre intento poner un naming que aporte información o que me diga cual es su finalidad. 
