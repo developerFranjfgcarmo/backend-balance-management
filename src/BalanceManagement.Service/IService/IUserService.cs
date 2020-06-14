@@ -14,5 +14,6 @@ namespace BalanceManagement.Service.IService
         Task<UserWithBalanceDto> GetByIdAsync(int id);
         Task<PagedCollection<UserWithBalanceDto>> GetListAsync (PagedFilter pagedFilter);
         Task<bool> ExistsUserAsync(UserDto user);
+        Task<bool> UpdateBalanceAsync(int id, double totalBalance);
     }
 }

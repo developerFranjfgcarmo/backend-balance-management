@@ -18,10 +18,12 @@ namespace BalanceManagement.Api.Controllers
     public class AccountController : BaseController
     {
         private readonly IAccountService _accountService;
+        private readonly IAccountTransactionService _accountTransactionService;
 
-        public AccountController(IAccountService accountService)
+        public AccountController(IAccountService accountService, IAccountTransactionService accountTransactionService)
         {
             _accountService = accountService;
+            _accountTransactionService = accountTransactionService;
         }
 
         #region [Account]
@@ -128,7 +130,7 @@ namespace BalanceManagement.Api.Controllers
         {
             if (GetRole() == Roles.User && GetUser() != id)
                 return Forbid();
-            var result = await _accountService.GetAccountsWithBalanceByUserIdAsync(id);
+            var result = await _accountTransactionService.GetAccountsWithBalanceByUserIdAsync(id);
             return result.Any() ? (IActionResult)Ok(result) : NotFound();
         }
         /// <summary>
@@ -147,7 +149,7 @@ namespace BalanceManagement.Api.Controllers
             if (id == balanceTransfer.AccountIdTarget)
                 return Conflict("The destination account must be different");
             balanceTransfer.AccountId = id;
-            var result = await _accountService.BalanceTransferToUserAsync(balanceTransfer);
+            var result = await _accountTransactionService.BalanceTransferToUserAsync(balanceTransfer);
             return result ? (IActionResult)Ok() : NotFound();
         }
 
@@ -166,7 +168,7 @@ namespace BalanceManagement.Api.Controllers
                 return Forbid();
             var userId = GetRole() == Roles.User ? GetUser() : (int?)null;
             var accountFilter = new AccountFilter{ AccountId = id, Page = filter.Page, Take = filter.Take, UserId = userId };
-            var result = await _accountService.GetTransactionByAccountAsync(accountFilter);
+            var result = await _accountTransactionService.GetTransactionByAccountAsync(accountFilter);
             return result.Items.Any() ? (IActionResult)Ok(result) : NotFound();
         }
 
@@ -184,7 +186,7 @@ namespace BalanceManagement.Api.Controllers
             if (!await IsOwnerAccount(modifyBalance)) return Forbid();
             modifyBalance.AccountId = id;
             modifyBalance.Amount = Math.Abs(modifyBalance.Amount);
-            var result = await _accountService.ModifyBalanceAsync(modifyBalance);
+            var result = await _accountTransactionService.ModifyBalanceAsync(modifyBalance);
             return result ? (IActionResult) Ok() : NotFound();
         }
 
@@ -202,7 +204,7 @@ namespace BalanceManagement.Api.Controllers
             if (!await IsOwnerAccount(modifyBalance)) return Forbid();
             modifyBalance.AccountId = id;
             modifyBalance.Amount = -Math.Abs(modifyBalance.Amount);
-            var result = await _accountService.ModifyBalanceAsync(modifyBalance);
+            var result = await _accountTransactionService.ModifyBalanceAsync(modifyBalance);
             return result ? (IActionResult) Ok() : NotFound();
         }
 

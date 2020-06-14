@@ -59,10 +59,10 @@ namespace BalanceManagement.Service.Service
             try
             {
                 await using var transaction = await BalanceManagementDbContext.Database.BeginTransactionAsync();
-                var user = await GetEntityByIdAsync(id);
+                var user = await BalanceManagementDbContext.Users.Include(i=>i.Accounts).FirstOrDefaultAsync(w => w.Id == id && !w.IsDeleted); ;
                 user.IsDeleted = true;
                 await SaveChangesAsync();
-                var accounts =await _accountService.GetAccountsWithBalanceByUserIdAsync(id);
+                var accounts =user.Accounts;
                 foreach (var account in accounts)
                 {
                     await _accountService.DeleteAsync(account.Id);
@@ -78,16 +78,16 @@ namespace BalanceManagement.Service.Service
 
         public async Task<UserWithBalanceDto> GetByIdAsync(int id)
         {
-            var owner = await GetEntityByIdAsync(id);
-            return owner.MapTo<UserWithBalanceDto>();
+            var user = await GetEntityByIdAsync(id);
+            return user.MapTo<UserWithBalanceDto>();
         }
 
         public async Task<PagedCollection<UserWithBalanceDto>> GetListAsync(PagedFilter pagedFilter)
         {
             Debug.Assert(pagedFilter == null);
             var result = new PagedCollection<UserWithBalanceDto>();
-            var owners = await BalanceManagementDbContext.Users.AsNoTracking().Where(w => !w.IsDeleted).Skip(pagedFilter.Page * pagedFilter.Take).Take(pagedFilter.Take).ToListAsync();
-            result.Items = owners.MapTo<IEnumerable<UserWithBalanceDto>>().ToList();
+            var users = await BalanceManagementDbContext.Users.AsNoTracking().Where(w => !w.IsDeleted).Skip(pagedFilter.Page * pagedFilter.Take).Take(pagedFilter.Take).ToListAsync();
+            result.Items = users.MapTo<IEnumerable<UserWithBalanceDto>>().ToList();
             result.Total = await BalanceManagementDbContext.Users.CountAsync(w => !w.IsDeleted);
             return result;
         }
@@ -96,6 +96,13 @@ namespace BalanceManagement.Service.Service
         {
             return await BalanceManagementDbContext.Users.CountAsync(w =>
                 w.Id != user.Id && w.UserName == user.UserName && !w.IsDeleted) > 0;
+        }
+
+        public async Task<bool> UpdateBalanceAsync(int id, double totalBalance)
+        {
+            var currentUser = await GetEntityByIdAsync(id);
+            currentUser.TotalBalance = totalBalance;
+            return await SaveChangesAsync();
         }
 
         private async Task<User> GetEntityByIdAsync(int id)

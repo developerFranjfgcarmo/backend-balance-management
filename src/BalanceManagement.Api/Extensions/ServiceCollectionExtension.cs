@@ -30,6 +30,7 @@ namespace BalanceManagement.Api.Extensions
             services.AddScoped<IBalanceManagementDbContext, BalanceManagementDbContext>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAccountTransactionService, AccountTransactionService>();
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             return services;
         }
