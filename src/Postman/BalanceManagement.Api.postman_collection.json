@@ -150,7 +150,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"userName\": \"Franjfgcarmo1\",\r\n  \"password\": \"1234\",\r\n  \"firstName\": \"Francisco\",\r\n  \"surname\": \"Fernández\",\r\n  \"nick\": \"Fran\",\r\n  \"phoneNumber\": \"654987321\",\r\n  \"street\": \"Calle Romero\",\r\n  \"postalCode\": \"41410\",\r\n  \"city\": \"Carmona\",\r\n  \"roleId\": 1,\r\n  \"userId\":5\r\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -158,7 +158,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:44353/api/user/5",
+							"raw": "https://localhost:44353/api/user/2",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -167,7 +167,7 @@
 							"path": [
 								"api",
 								"user",
-								"5"
+								"2"
 							]
 						}
 					},
@@ -290,7 +290,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"Cuenta user Franjfgcarmo2\",\r\n  \"userId\":3\r\n}",
+							"raw": "{\r\n  \"name\": \"Cuenta user Franjfgcarmo3\",\r\n  \"userId\":3\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -551,7 +551,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"Amount\": 25,\r\n  \"AccountIdTarget\":3,\r\n  \"UserTarget\":\"Franjfgcarmo2\"\r\n}",
+							"raw": "{\r\n  \"Amount\": 25,\r\n  \"AccountIdTarget\":2,\r\n  \"UserTarget\":\"Franjfgcarmo41\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -559,7 +559,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:44353/api/account/2/transfer-to-user",
+							"raw": "https://localhost:44353/api/account/1/transfer-to-user",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -568,7 +568,7 @@
 							"path": [
 								"api",
 								"account",
-								"2",
+								"1",
 								"transfer-to-user"
 							]
 						},
