@@ -31,22 +31,16 @@ namespace BalanceManagement.Service.Service
         [TransactionAsync]
         public async Task<bool> ModifyBalanceAsync(ModifyBalanceDto modifyBalance)
         {
-            try
-            {
-                var lastTotal = await BalanceManagementDbContext.AccountTransactions
-                    .Where(w => w.AccountId == modifyBalance.AccountId).OrderByDescending(m => m.Id)
-                    .Select(s => s.Total).FirstOrDefaultAsync();
-                var balance = modifyBalance.MapTo<AccountTransaction>();
-                balance.Total = lastTotal + modifyBalance.Amount;
-                balance.TransferDate = DateTime.Now;
-                await BalanceManagementDbContext.AccountTransactions.AddAsync(balance);
-                await SaveChangesAsync();
-                await UpdateBalanceOfUser(modifyBalance.UserId);
-            }
-            catch (Exception)
-            {
-                return await Task.FromResult(false);
-            }
+
+            var lastTotal = await BalanceManagementDbContext.AccountTransactions
+                .Where(w => w.AccountId == modifyBalance.AccountId).OrderByDescending(m => m.Id)
+                .Select(s => s.Total).FirstOrDefaultAsync();
+            var balance = modifyBalance.MapTo<AccountTransaction>();
+            balance.Total = lastTotal + modifyBalance.Amount;
+            balance.TransferDate = DateTime.Now;
+            await BalanceManagementDbContext.AccountTransactions.AddAsync(balance);
+            await SaveChangesAsync();
+            await UpdateBalanceOfUser(modifyBalance.UserId);
             return await Task.FromResult(true);
         }
 
@@ -62,33 +56,26 @@ namespace BalanceManagement.Service.Service
         /// </summary>
         /// <param name="balanceTransfer">transfer data</param>
         /// <returns></returns>
-       [TransactionAsync]
+        [TransactionAsync]
         public async Task<bool> BalanceTransferToUserAsync(BalanceTransferDto balanceTransfer)
         {
             var targetUser = await BalanceManagementDbContext.Users.AsNoTracking().FirstOrDefaultAsync(f => f.UserName == balanceTransfer.UserTarget);
             var sourceUser = await BalanceManagementDbContext.Accounts.AsNoTracking()
                 .Where(w => w.Id == balanceTransfer.AccountId).Select(s => s.User).FirstOrDefaultAsync();
-            try
+            await ModifyBalanceAsync(new ModifyBalanceDto
             {
-                await ModifyBalanceAsync(new ModifyBalanceDto
-                {
-                    AccountId = balanceTransfer.AccountId,
-                    Amount = -balanceTransfer.Amount,
-                    Description = $"Transfer to user: {balanceTransfer.UserTarget}",
-                    UserId = sourceUser.Id
-                });
-                await ModifyBalanceAsync(new ModifyBalanceDto
-                {
-                    AccountId = balanceTransfer.AccountIdTarget,
-                    Amount = balanceTransfer.Amount,
-                    Description = $"Transfer from user: {sourceUser.UserName}",
-                    UserId = targetUser.Id
-                });
-            }
-            catch (Exception)
+                AccountId = balanceTransfer.AccountId,
+                Amount = -balanceTransfer.Amount,
+                Description = $"Transfer to user: {balanceTransfer.UserTarget}",
+                UserId = sourceUser.Id
+            });
+            await ModifyBalanceAsync(new ModifyBalanceDto
             {
-                return await Task.FromResult(false);
-            }
+                AccountId = balanceTransfer.AccountIdTarget,
+                Amount = balanceTransfer.Amount,
+                Description = $"Transfer from user: {sourceUser.UserName}",
+                UserId = targetUser.Id
+            });
 
             return await Task.FromResult(true);
         }

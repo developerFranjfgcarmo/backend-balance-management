@@ -66,21 +66,16 @@ namespace BalanceManagement.Service.Service
         [TransactionAsync]
         public async Task<bool> DeleteAsync(int id)
         {
-            try
+       
+            var user = await BalanceManagementDbContext.Users.Include(i=>i.Accounts).FirstOrDefaultAsync(w => w.Id == id && !w.IsDeleted); ;
+            user.IsDeleted = true;
+            await SaveChangesAsync();
+            var accounts =user.Accounts;
+            foreach (var account in accounts)
             {
-                var user = await BalanceManagementDbContext.Users.Include(i=>i.Accounts).FirstOrDefaultAsync(w => w.Id == id && !w.IsDeleted); ;
-                user.IsDeleted = true;
-                await SaveChangesAsync();
-                var accounts =user.Accounts;
-                foreach (var account in accounts)
-                {
-                    await _accountService.DeleteAsync(account.Id);
-                }
+                await _accountService.DeleteAsync(account.Id);
             }
-            catch (Exception)
-            {
-                return await Task.FromResult(false); ;
-            }
+           
             return await Task.FromResult(true); ;
         }
 
