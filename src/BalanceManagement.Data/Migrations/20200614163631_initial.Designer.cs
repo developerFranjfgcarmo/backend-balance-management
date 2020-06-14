@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BalanceManagement.Data.Migrations
 {
     [DbContext(typeof(BalanceManagementDbContext))]
-    [Migration("20200614085352_initial-migration")]
-    partial class initialmigration
+    [Migration("20200614163631_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -137,10 +137,13 @@ namespace BalanceManagement.Data.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<string>("Password")
+                    b.Property<byte[]>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
+                        .HasColumnType("varbinary(250)")
                         .HasMaxLength(250);
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(15)")
@@ -160,6 +163,9 @@ namespace BalanceManagement.Data.Migrations
                     b.Property<string>("Surname")
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
+
+                    b.Property<decimal>("TotalBalance")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(50)")

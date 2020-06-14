@@ -26,7 +26,11 @@ namespace BalanceManagement.Service.Service
         public async Task<UserDto> Authenticate(string userName, string password)
         {
             //todo: dencrypt  password
-            var user = await BalanceManagementDbContext.Users.FirstOrDefaultAsync(w => w.UserName == userName && w.Password == password && !w.IsDeleted);
+            var user = await BalanceManagementDbContext.Users.FirstOrDefaultAsync(w => w.UserName == userName && !w.IsDeleted);
+            if (user != null && !VerifyPasswordHash(password, user.Password, user.PasswordSalt))
+            {
+                return null;
+            }
             return user.MapTo<UserDto>();
         }
 
@@ -34,7 +38,11 @@ namespace BalanceManagement.Service.Service
         {
             //todo: encrypt  password
             Debug.Assert(user == null);
-            var entity = await BalanceManagementDbContext.Users.AddAsync(user.MapTo<User>());
+            var entityUser = user.MapTo<User>();
+            CreatePasswordHash(user.Password, out byte[] passwordHash, out byte[] passwordSalt);
+            entityUser.Password = passwordHash;
+            entityUser.PasswordSalt = passwordSalt;
+            var entity = await BalanceManagementDbContext.Users.AddAsync(entityUser);
             await SaveChangesAsync();
             return entity.Entity.MapTo<UserDto>();
         }
@@ -69,7 +77,7 @@ namespace BalanceManagement.Service.Service
                     await _accountService.DeleteAsync(account.Id);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return await Task.FromResult(false); ;
             }
@@ -110,6 +118,18 @@ namespace BalanceManagement.Service.Service
             return await BalanceManagementDbContext.Users.FirstOrDefaultAsync(w => w.Id == id && !w.IsDeleted);
         }
 
+        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            using var hmac = new System.Security.Cryptography.HMACSHA512();
+            passwordSalt = hmac.Key;
+            passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+        }
 
+        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt);
+            var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            return !computedHash.Where((t, i) => t != passwordHash[i]).Any();
+        }
     }
 }

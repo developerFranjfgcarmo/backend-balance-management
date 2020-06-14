@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BalanceManagement.Data.Migrations
 {
-    public partial class initialmigration : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,7 +27,8 @@ namespace BalanceManagement.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserName = table.Column<string>(maxLength: 50, nullable: true),
-                    Password = table.Column<string>(maxLength: 250, nullable: false),
+                    Password = table.Column<byte[]>(maxLength: 250, nullable: false),
+                    PasswordSalt = table.Column<byte[]>(nullable: true),
                     FirstName = table.Column<string>(maxLength: 50, nullable: false),
                     Surname = table.Column<string>(maxLength: 50, nullable: true),
                     Nick = table.Column<string>(maxLength: 50, nullable: true),
@@ -37,7 +38,8 @@ namespace BalanceManagement.Data.Migrations
                     City = table.Column<string>(maxLength: 50, nullable: true),
                     Active = table.Column<bool>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
-                    RoleId = table.Column<int>(nullable: false)
+                    RoleId = table.Column<int>(nullable: false),
+                    TotalBalance = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {

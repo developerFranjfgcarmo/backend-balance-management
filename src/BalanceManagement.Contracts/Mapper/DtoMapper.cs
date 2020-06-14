@@ -12,7 +12,7 @@ namespace BalanceManagement.Contracts.Mapper
     {
         public DtoMapper()
         {
-            CreateMap<UserDto, User>();
+            CreateMap<UserDto, User>().ForMember(f => f.Password, map => map.Ignore()); ;
             CreateMap<User, UserWithBalanceDto>().ForMember(f => f.Password, map => map.Ignore());
             CreateMap<User, UserDto>()
                 .ForMember(f => f.Password, map => map.Ignore());

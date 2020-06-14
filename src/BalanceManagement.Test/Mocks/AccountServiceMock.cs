@@ -25,9 +25,9 @@ namespace BalanceManagement.Test.Mocks
 
             var users = new List<User>
             {
-                new User { Id = 1, FirstName = "Francisco", Surname = "Fernández", Nick="Fran", UserName ="Francisco",Password = "1234", RoleId = 1},
-                new User { Id = 2, FirstName = "Pepe", Surname = "Rodriguez", Nick="", UserName = "Pepe",Password = "1234", RoleId = 1},
-                new User { Id = 3, FirstName = "Juan", Surname = "Villena", Nick="Juan", UserName ="Juan",Password = "1234", RoleId = 1}
+                new User { Id = 1, FirstName = "Francisco", Surname = "Fernández", Nick="Fran", UserName ="Francisco",Password = new byte[1],RoleId = 1},
+                new User { Id = 2, FirstName = "Pepe", Surname = "Rodriguez", Nick="", UserName = "Pepe",Password = new byte[1], RoleId = 1},
+                new User { Id = 3, FirstName = "Juan", Surname = "Villena", Nick="Juan", UserName ="Juan",Password = new byte[1], RoleId = 1}
             };
             
           
