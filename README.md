@@ -58,6 +58,7 @@ fullstack-owner-property-management
 6. Crear un usuario a través del end point: "./api/user". Hay dos tipos de usuario:Admin=1 y User=2. Este método es público. Se recomienda crar un usuario administrador y un usuario normal.
 7. Una vez creado los usuario hacer login en el siguiente end point: "api/login/authenticate"
 8. El token está establecido como una variable global en el postman. Se recomienda generar y guardar el token de los usuarios.
+
  ![](src/images/token.PNG)
 
 ## Postman.
