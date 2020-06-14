@@ -19,7 +19,7 @@ namespace BalanceManagement.Test.Services
         }
 
         [Fact]
-        public async void User_Modify_TotalBalance()
+        public async void Add_Balance_And_Check_balance()
         {
             var userId = 1;
             var userService = new UserService(_fixture.GetDbContext(), null);
@@ -31,11 +31,14 @@ namespace BalanceManagement.Test.Services
                 {AccountId = 1, Amount = -5, Description = "Movimiento 2", UserId = userId});
             var user = await userService.GetByIdAsync(userId);
 
-            Assert.True(user.TotalBalance.Equals(95.0));
+            var targetLastTransaction = _fixture.GetDbContext().AccountTransactions.Where(w => w.AccountId == 1)
+                .OrderByDescending(o => o.Id).FirstOrDefault();
+
+            Assert.True(user.TotalBalance.Equals(targetLastTransaction.Total));
         }
 
         [Fact]
-        public async void User_Transfer_TotalBalance()
+        public async void Transfer_Balance_To_Other_User_And_Check_balances()
         {
             var sourceUserId = 1;
             var targetUserId = 2;
