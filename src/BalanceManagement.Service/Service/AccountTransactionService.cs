@@ -84,14 +84,14 @@ namespace BalanceManagement.Service.Service
                     AccountId = balanceTransfer.AccountId,
                     Amount = -balanceTransfer.Amount,
                     Description = $"Transfer to user: {balanceTransfer.UserTarget}",
-                    UserId = targetUser.Id
+                    UserId = sourceUser.Id
                 });
                 await ModifyBalanceAsync(new ModifyBalanceDto
                 {
                     AccountId = balanceTransfer.AccountIdTarget,
                     Amount = balanceTransfer.Amount,
                     Description = $"Transfer from user: {sourceUser.UserName}",
-                    UserId = sourceUser.Id
+                    UserId = targetUser.Id
                 });
                 await transaction.CommitAsync();
             }
