@@ -69,10 +69,8 @@ namespace BalanceManagement.Service.Service
                 balance.TransferDate = DateTime.Now;
                 await BalanceManagementDbContext.AccountTransactions.AddAsync(balance);
                 await SaveChangesAsync();
-
-
-
-                if (BalanceManagementDbContext.Database.CurrentTransaction == null)
+                await UpdateBalanceOfUser(modifyBalance.UserId);
+                if (transaction != null)
                 {
                     await transaction.CommitAsync();
                 }
@@ -133,7 +131,7 @@ namespace BalanceManagement.Service.Service
         public async Task<IEnumerable<AccountBalanceDto>> GetAccountsWithBalanceByUserIdAsync(int userId)
         {
             var result =await (from a in BalanceManagementDbContext.Accounts
-                where !a.IsDeleted
+                where !a.IsDeleted && a.UserId == userId
                 select new AccountBalanceDto()
                 {
                     Id = a.Id,
