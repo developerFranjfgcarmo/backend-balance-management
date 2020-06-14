@@ -11,6 +11,7 @@ using BalanceManagement.Data.Context;
 using BalanceManagement.Data.Entities;
 using BalanceManagement.Service.IService;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BalanceManagement.Service.Service
 {
@@ -44,15 +45,51 @@ namespace BalanceManagement.Service.Service
             user.IsDeleted = true;
             return await SaveChangesAsync();
         }
+        /// <summary>
+        /// With this package: Mr. Advice is an open source alternative to PostSharp. The transaction can be globally controlled.
+        /// I have used it like this.
+        /// </summary>
+        /// <param name="modifyBalance"></param>
+        /// <returns></returns>
         public async Task<bool> ModifyBalanceAsync(ModifyBalanceDto modifyBalance)
         {
-            var lastTotal = await BalanceManagementDbContext.AccountTransactions
-                .Where(w => w.AccountId == modifyBalance.AccountId).OrderByDescending(m => m.Id)
-                .Select(s => s.Total).FirstOrDefaultAsync();
-            var balance = modifyBalance.MapTo<AccountTransaction>();
-            balance.Total = lastTotal + modifyBalance.Amount;
-            balance.TransferDate = DateTime.Now;
-            await BalanceManagementDbContext.AccountTransactions.AddAsync(balance);
+            try
+            {
+                IDbContextTransaction transaction = null;
+                if (BalanceManagementDbContext.Database.CurrentTransaction == null)
+                {
+                    transaction = await BalanceManagementDbContext.Database.BeginTransactionAsync();
+                }
+                
+                var lastTotal = await BalanceManagementDbContext.AccountTransactions
+                    .Where(w => w.AccountId == modifyBalance.AccountId).OrderByDescending(m => m.Id)
+                    .Select(s => s.Total).FirstOrDefaultAsync();
+                var balance = modifyBalance.MapTo<AccountTransaction>();
+                balance.Total = lastTotal + modifyBalance.Amount;
+                balance.TransferDate = DateTime.Now;
+                await BalanceManagementDbContext.AccountTransactions.AddAsync(balance);
+                await SaveChangesAsync();
+
+
+
+                if (BalanceManagementDbContext.Database.CurrentTransaction == null)
+                {
+                    await transaction.CommitAsync();
+                }
+            }
+            catch (Exception )
+            {
+                return await Task.FromResult(false);
+            }
+            return await Task.FromResult(true);
+        }
+
+        private async Task<bool> UpdateBalanceOfUser(int id)
+        {
+            var accounts = await GetAccountsWithBalanceByUserIdAsync(id);
+            var totalBalance = accounts.Sum(s => s.Total);
+            var currentUser =await BalanceManagementDbContext.Users.FirstOrDefaultAsync(w=>!w.IsDeleted && w.Id==id);
+            currentUser.TotalBalance = totalBalance;
             return await SaveChangesAsync();
         }
         /// <summary>
@@ -93,9 +130,10 @@ namespace BalanceManagement.Service.Service
             return await Task.FromResult(true);
         }
 
-        public async Task<IEnumerable<AccountDto>> GetAccountsByUserIdAsync(int userId)
+        public async Task<IEnumerable<AccountBalanceDto>> GetAccountsWithBalanceByUserIdAsync(int userId)
         {
             var result =await (from a in BalanceManagementDbContext.Accounts
+                where !a.IsDeleted
                 select new AccountBalanceDto()
                 {
                     Id = a.Id,
@@ -103,12 +141,10 @@ namespace BalanceManagement.Service.Service
                     Total = a.AccountTransactions.OrderByDescending(o=>o.Id).FirstOrDefault().Total
                 }).ToListAsync();
 
-            var accounts = await BalanceManagementDbContext.Accounts.AsNoTracking().Where(w => w.UserId == userId)
-                .ToListAsync();
-            return accounts.MapTo<IEnumerable<AccountDto>>();
+            return result;
         }
 
-        public async Task<PagedCollection<AccountTransactionsDto>> GetBalanceByAccountAsync(AccountFilter accountFilter)
+        public async Task<PagedCollection<AccountTransactionsDto>> GetTransactionByAccountAsync(AccountFilter accountFilter)
         {
             var pagedCollection = new PagedCollection<AccountTransactionsDto>
             {

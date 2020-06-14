@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using BalanceManagement.Contracts.Dtos;
 using BalanceManagement.Contracts.Dtos.Filter;
 using BalanceManagement.Contracts.Dtos.Users;
 using BalanceManagement.Data.Types;
@@ -35,7 +36,7 @@ namespace BalanceManagement.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAsync(UserDto user)
         {
-            if (await _userService.ExistsUser(user)) return Conflict("username exists");
+            if (await _userService.ExistsUserAsync(user)) return Conflict("username exists");
             var result = await _userService.AddAsync(user);
             return result != null ? (IActionResult) Ok(result) : Conflict();
         }
@@ -56,7 +57,7 @@ namespace BalanceManagement.Api.Controllers
         public async Task<IActionResult> UpdateAsync(UserDto user)
         {
             if (user.Id != GetUser() && GetRole()==Roles.User) return Forbid();
-            if (await _userService.ExistsUser(user)) return Conflict("username exists");
+            if (await _userService.ExistsUserAsync(user)) return Conflict("username exists");
             var result = await _userService.UpdateAsync(user);
             return result != null ? (IActionResult) Ok(result) : Conflict();
         }
@@ -68,7 +69,7 @@ namespace BalanceManagement.Api.Controllers
         /// <returns></returns>
         /// <response code="200">User updated successfully</response>
         /// <response code="404">There are not users</response>
-        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PagedCollection<UserWithBalanceDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet]
         [Authorize(Roles = nameof(Roles.Admin))]

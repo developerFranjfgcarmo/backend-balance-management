@@ -13,8 +13,8 @@ namespace BalanceManagement.Service.IService
         Task<bool> DeleteAsync(int id);
         Task<bool> ModifyBalanceAsync(ModifyBalanceDto modifyBalance);
         Task<bool> BalanceTransferToUserAsync(BalanceTransferDto balanceTransfer);
-        Task<IEnumerable<AccountDto>> GetAccountsByUserIdAsync(int userId);
-        Task<PagedCollection<AccountTransactionsDto>> GetBalanceByAccountAsync(AccountFilter accountFilter);
+        Task<IEnumerable<AccountBalanceDto>> GetAccountsWithBalanceByUserIdAsync(int userId);
+        Task<PagedCollection<AccountTransactionsDto>> GetTransactionByAccountAsync(AccountFilter accountFilter);
         Task<bool> IsOwnerAccountAsync(int userId, int accountId);
         Task<PagedCollection<AccountDto>> GetListAsync(int? userId,PagedFilter pagedFilter);
     }

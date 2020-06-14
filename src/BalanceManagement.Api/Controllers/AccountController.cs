@@ -106,30 +106,31 @@ namespace BalanceManagement.Api.Controllers
             var result = await _accountService.GetListAsync(userId,filter);
             return result.Items.Any() ? (IActionResult)Ok(result) : NotFound();
         }
-        /// <summary>
-        /// Get the accounts of a user
-        /// </summary>
-        /// <param name="id">user id</param>
-        /// <returns></returns>
-        /// <response code="200">Get All accounts of a user</response>
-        /// <response code="404">There are not accounts</response>
-        /// <response code="403">You don’t have permission to access this resource</response>
-        [ProducesResponseType(typeof(IEnumerable<AccountDto>),StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [HttpGet]
-        [Route("user/{id}")]
-        [Authorize(Roles = "User,Admin")]
-        public async Task<IActionResult> GetAccountsByUserIdAsync(int id)
-        {
-            if (GetRole() == Roles.User && GetUser()!=id)
-                return Forbid();
-            var result = await _accountService.GetAccountsByUserIdAsync(id);
-            return result.Any() ? (IActionResult)Ok(result) : NotFound();
-        }
+
         #endregion
 
         #region [Balance]
+        /// <summary>
+        /// Get All accounts of a user with his current balance
+        /// </summary>
+        /// <param name="id">user id</param>
+        /// <returns></returns>
+        /// <response code="200">Account with its balance</response>
+        /// <response code="404">There are not accounts</response>
+        /// <response code="403">You don’t have permission to access this resource</response>
+        [ProducesResponseType(typeof(IEnumerable<AccountBalanceDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [HttpGet]
+        [Route("user/{id}/accounts-balance")]
+        [Authorize(Roles = "User,Admin")]
+        public async Task<IActionResult> GetAccountsByUserIdAsync(int id)
+        {
+            if (GetRole() == Roles.User && GetUser() != id)
+                return Forbid();
+            var result = await _accountService.GetAccountsWithBalanceByUserIdAsync(id);
+            return result.Any() ? (IActionResult)Ok(result) : NotFound();
+        }
         /// <summary>
         /// Transfer balance to other user
         /// </summary>
@@ -165,7 +166,7 @@ namespace BalanceManagement.Api.Controllers
                 return Forbid();
             var userId = GetRole() == Roles.User ? GetUser() : (int?)null;
             var accountFilter = new AccountFilter{ AccountId = id, Page = filter.Page, Take = filter.Take, UserId = userId };
-            var result = await _accountService.GetBalanceByAccountAsync(accountFilter);
+            var result = await _accountService.GetTransactionByAccountAsync(accountFilter);
             return result.Items.Any() ? (IActionResult)Ok(result) : NotFound();
         }
 

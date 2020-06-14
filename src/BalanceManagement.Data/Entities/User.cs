@@ -17,6 +17,7 @@ namespace BalanceManagement.Data.Entities
         public bool Active { get; set; }
         public bool IsDeleted { get; set; }
         public int RoleId { get; set; }
+        public double TotalBalance { get; set; }
         public virtual Role Role { get; set; }
         public virtual ICollection<Account> Accounts { get; set; }
         public virtual ICollection<AccountTransaction> AccountTransactions { get; set; }

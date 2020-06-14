@@ -19,6 +19,7 @@ namespace BalanceManagement.Data.Configurations
             builder.Property(p => p.Street).HasMaxLength(250);
             builder.Property(p => p.PostalCode).HasMaxLength(6);
             builder.Property(p => p.City).HasMaxLength(50);
+            builder.Property(p => p.TotalBalance).HasColumnType("decimal(18,2)");
             builder.HasOne(ho => ho.Role).WithMany(wm => wm.User).HasForeignKey(fk => fk.RoleId);
         }
     }

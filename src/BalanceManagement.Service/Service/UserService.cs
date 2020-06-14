@@ -62,7 +62,7 @@ namespace BalanceManagement.Service.Service
                 var user = await GetEntityByIdAsync(id);
                 user.IsDeleted = true;
                 await SaveChangesAsync();
-                var accounts =await _accountService.GetAccountsByUserIdAsync(id);
+                var accounts =await _accountService.GetAccountsWithBalanceByUserIdAsync(id);
                 foreach (var account in accounts)
                 {
                     await _accountService.DeleteAsync(account.Id);
@@ -76,23 +76,23 @@ namespace BalanceManagement.Service.Service
             return await Task.FromResult(true); ;
         }
 
-        public async Task<UserDto> GetByIdAsync(int id)
+        public async Task<UserWithBalanceDto> GetByIdAsync(int id)
         {
             var owner = await GetEntityByIdAsync(id);
-            return owner.MapTo<UserDto>();
+            return owner.MapTo<UserWithBalanceDto>();
         }
 
-        public async Task<PagedCollection<UserDto>> GetListAsync(PagedFilter pagedFilter)
+        public async Task<PagedCollection<UserWithBalanceDto>> GetListAsync(PagedFilter pagedFilter)
         {
             Debug.Assert(pagedFilter == null);
-            var result = new PagedCollection<UserDto>();
+            var result = new PagedCollection<UserWithBalanceDto>();
             var owners = await BalanceManagementDbContext.Users.AsNoTracking().Where(w => !w.IsDeleted).Skip(pagedFilter.Page * pagedFilter.Take).Take(pagedFilter.Take).ToListAsync();
-            result.Items = owners.MapTo<IEnumerable<UserDto>>().ToList();
+            result.Items = owners.MapTo<IEnumerable<UserWithBalanceDto>>().ToList();
             result.Total = await BalanceManagementDbContext.Users.CountAsync(w => !w.IsDeleted);
             return result;
         }
 
-        public async Task<bool> ExistsUser(UserDto user)
+        public async Task<bool> ExistsUserAsync(UserDto user)
         {
             return await BalanceManagementDbContext.Users.CountAsync(w =>
                 w.Id != user.Id && w.UserName == user.UserName && !w.IsDeleted) > 0;

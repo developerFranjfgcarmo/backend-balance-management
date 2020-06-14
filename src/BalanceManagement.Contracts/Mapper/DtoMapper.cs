@@ -13,14 +13,16 @@ namespace BalanceManagement.Contracts.Mapper
         public DtoMapper()
         {
             CreateMap<UserDto, User>();
+            CreateMap<User, UserWithBalanceDto>().ForMember(f => f.Password, map => map.Ignore());
             CreateMap<User, UserDto>()
-                .ForMember(f=>f.Password,map=> map.Ignore());
+                .ForMember(f => f.Password, map => map.Ignore());
             CreateMap<AccountDto, Account>();
             CreateMap<Account, AccountDto>();
             //CreateMap<Account, AccountDetailsDto>()
             //    .ForMember(f=>f.AccountBalances, map=>map.MapFrom(m=>m.AccountBalances));
             CreateMap<AccountTransaction, AccountTransactionsDto>();
-            CreateMap<ModifyBalanceDto, AccountTransaction>(); ;
+            CreateMap<ModifyBalanceDto, AccountTransaction>();
+            ;
         }
     }
 }
