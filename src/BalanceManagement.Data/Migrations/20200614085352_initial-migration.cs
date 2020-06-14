@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BalanceManagement.Data.Migrations
 {
-    public partial class initial : Migration
+    public partial class initialmigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,7 +26,7 @@ namespace BalanceManagement.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserName = table.Column<string>(nullable: true),
+                    UserName = table.Column<string>(maxLength: 50, nullable: true),
                     Password = table.Column<string>(maxLength: 250, nullable: false),
                     FirstName = table.Column<string>(maxLength: 50, nullable: false),
                     Surname = table.Column<string>(maxLength: 50, nullable: true),
@@ -57,7 +57,8 @@ namespace BalanceManagement.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<int>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -71,7 +72,7 @@ namespace BalanceManagement.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AccountBalance",
+                name: "AccountTransaction",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -85,15 +86,15 @@ namespace BalanceManagement.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AccountBalance", x => x.Id);
+                    table.PrimaryKey("PK_AccountTransaction", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AccountBalance_Account_AccountId",
+                        name: "FK_AccountTransaction_Account_AccountId",
                         column: x => x.AccountId,
                         principalTable: "Account",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AccountBalance_User_TransferredByUser",
+                        name: "FK_AccountTransaction_User_TransferredByUser",
                         column: x => x.TransferredByUser,
                         principalTable: "User",
                         principalColumn: "Id",
@@ -116,13 +117,13 @@ namespace BalanceManagement.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AccountBalance_AccountId",
-                table: "AccountBalance",
+                name: "IX_AccountTransaction_AccountId",
+                table: "AccountTransaction",
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AccountBalance_TransferredByUser",
-                table: "AccountBalance",
+                name: "IX_AccountTransaction_TransferredByUser",
+                table: "AccountTransaction",
                 column: "TransferredByUser");
 
             migrationBuilder.CreateIndex(
@@ -139,7 +140,7 @@ namespace BalanceManagement.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AccountBalance");
+                name: "AccountTransaction");
 
             migrationBuilder.DropTable(
                 name: "Account");

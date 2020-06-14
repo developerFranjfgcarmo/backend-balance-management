@@ -19,8 +19,8 @@ namespace BalanceManagement.Contracts.Mapper
             CreateMap<Account, AccountDto>();
             //CreateMap<Account, AccountDetailsDto>()
             //    .ForMember(f=>f.AccountBalances, map=>map.MapFrom(m=>m.AccountBalances));
-            CreateMap<AccountBalance, AccountBalanceDto>();
-            CreateMap<ModifyBalanceDto, AccountBalance>(); ;
+            CreateMap<AccountTransaction, AccountTransactionsDto>();
+            CreateMap<ModifyBalanceDto, AccountTransaction>(); ;
         }
     }
 }

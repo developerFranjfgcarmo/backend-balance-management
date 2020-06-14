@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BalanceManagement.Data.Migrations
 {
     [DbContext(typeof(BalanceManagementDbContext))]
-    [Migration("20200611173032_initial")]
-    partial class initial
+    [Migration("20200614085352_initial-migration")]
+    partial class initialmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,6 +28,9 @@ namespace BalanceManagement.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
@@ -43,7 +46,7 @@ namespace BalanceManagement.Data.Migrations
                     b.ToTable("Account");
                 });
 
-            modelBuilder.Entity("BalanceManagement.Data.Entities.AccountBalance", b =>
+            modelBuilder.Entity("BalanceManagement.Data.Entities.AccountTransaction", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -76,7 +79,7 @@ namespace BalanceManagement.Data.Migrations
 
                     b.HasIndex("TransferredByUser");
 
-                    b.ToTable("AccountBalance");
+                    b.ToTable("AccountTransaction");
                 });
 
             modelBuilder.Entity("BalanceManagement.Data.Entities.Role", b =>
@@ -159,7 +162,8 @@ namespace BalanceManagement.Data.Migrations
                         .HasMaxLength(50);
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
@@ -179,16 +183,16 @@ namespace BalanceManagement.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BalanceManagement.Data.Entities.AccountBalance", b =>
+            modelBuilder.Entity("BalanceManagement.Data.Entities.AccountTransaction", b =>
                 {
                     b.HasOne("BalanceManagement.Data.Entities.Account", "Account")
-                        .WithMany("AccountBalances")
+                        .WithMany("AccountTransactions")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BalanceManagement.Data.Entities.User", "User")
-                        .WithMany("AccountBalances")
+                        .WithMany("AccountTransactions")
                         .HasForeignKey("TransferredByUser");
                 });
 

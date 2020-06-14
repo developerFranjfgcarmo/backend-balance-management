@@ -2,7 +2,7 @@
 
 namespace BalanceManagement.Data.Entities
 {
-    public class AccountBalance
+    public class AccountTransaction
     {
         public long Id { get; set; }
         public string Description { get; set; }

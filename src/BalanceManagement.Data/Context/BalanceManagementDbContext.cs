@@ -20,6 +20,6 @@ namespace BalanceManagement.Data.Context
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Account> Accounts { get; set; }
-        public DbSet<AccountBalance> AccountBalances { get; set; }
+        public DbSet<AccountTransaction> AccountTransactions { get; set; }
     }
 }

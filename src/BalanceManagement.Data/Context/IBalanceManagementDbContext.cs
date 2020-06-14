@@ -13,7 +13,7 @@ namespace BalanceManagement.Data.Context
         DbSet<User> Users  { get; set; }
         DbSet<Role> Roles { get; set; }
         DbSet<Account> Accounts { get; set; }
-        DbSet<AccountBalance> AccountBalances { get; set; }
+        DbSet<AccountTransaction> AccountTransactions { get; set; }
         DatabaseFacade Database { get; }
         int SaveChanges();
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken());

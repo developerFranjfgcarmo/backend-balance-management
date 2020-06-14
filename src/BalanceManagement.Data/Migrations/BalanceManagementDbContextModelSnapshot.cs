@@ -44,7 +44,7 @@ namespace BalanceManagement.Data.Migrations
                     b.ToTable("Account");
                 });
 
-            modelBuilder.Entity("BalanceManagement.Data.Entities.AccountBalance", b =>
+            modelBuilder.Entity("BalanceManagement.Data.Entities.AccountTransaction", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -77,7 +77,7 @@ namespace BalanceManagement.Data.Migrations
 
                     b.HasIndex("TransferredByUser");
 
-                    b.ToTable("AccountBalance");
+                    b.ToTable("AccountTransaction");
                 });
 
             modelBuilder.Entity("BalanceManagement.Data.Entities.Role", b =>
@@ -181,16 +181,16 @@ namespace BalanceManagement.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BalanceManagement.Data.Entities.AccountBalance", b =>
+            modelBuilder.Entity("BalanceManagement.Data.Entities.AccountTransaction", b =>
                 {
                     b.HasOne("BalanceManagement.Data.Entities.Account", "Account")
-                        .WithMany("AccountBalances")
+                        .WithMany("AccountTransactions")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BalanceManagement.Data.Entities.User", "User")
-                        .WithMany("AccountBalances")
+                        .WithMany("AccountTransactions")
                         .HasForeignKey("TransferredByUser");
                 });
 

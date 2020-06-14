@@ -11,7 +11,7 @@ namespace BalanceManagement.Data.Extensions
         {
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
-            modelBuilder.ApplyConfiguration(new AccountBalanceConfiguration());
+            modelBuilder.ApplyConfiguration(new AccountTransactionConfiguration());
             modelBuilder.ApplyConfiguration(new AccountConfiguration());
         }
 
