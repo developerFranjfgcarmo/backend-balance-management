@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BalanceManagement.Contracts.Dtos.Accounts;
+﻿using BalanceManagement.Contracts.Dtos.Accounts;
 using BalanceManagement.Service.Service;
 using BalanceManagement.Test.Mocks;
 using Xunit;
@@ -21,31 +17,32 @@ namespace BalanceManagement.Test.Services
         [Fact]
         public async void Add_Balance_And_Check_balance()
         {
-            var userId = 1;
+            //arrange
+            var userId = 3;
             var userService = new UserService(_fixture.GetDbContext(), null);
             var accountTransactionService = new AccountTransactionService(_fixture.GetDbContext(), userService);
-
+            //act
             await accountTransactionService.ModifyBalanceAsync(new ModifyBalanceDto
-                {AccountId = 1, Amount = 100, Description = "Movimiento 1", UserId = userId });
+                {AccountId = 3, Amount = 100, Description = "Movimiento 1", UserId = userId });
             await accountTransactionService.ModifyBalanceAsync(new ModifyBalanceDto
-                {AccountId = 1, Amount = -5, Description = "Movimiento 2", UserId = userId});
+                {AccountId = 3, Amount = -5, Description = "Movimiento 2", UserId = userId});
             var user = await userService.GetByIdAsync(userId);
 
-            var targetLastTransaction = _fixture.GetDbContext().AccountTransactions.Where(w => w.AccountId == 1)
-                .OrderByDescending(o => o.Id).FirstOrDefault();
-
-            Assert.True(user.TotalBalance.Equals(targetLastTransaction.Total));
+            var targetTotalBalance = AccountServiceMock.Instance().GetTotalBalanceByAccountId(_fixture,3);
+            //Assert
+            Assert.True(user.TotalBalance.Equals(targetTotalBalance));
         }
 
         [Fact]
-        public async void Transfer_Balance_To_Other_User_And_Check_balances()
+        public async void Transfer_Balance_To_Other_User_And_Check_both_balances()
         {
+            //arrange
             var sourceUserId = 1;
             var targetUserId = 2;
             var UserName = "Pepe";
             var accountId = 1;
             var targetAccountId = 2;
-
+            //act
             var userService = new UserService(_fixture.GetDbContext(), null);
             var accountTransactionService = new AccountTransactionService(_fixture.GetDbContext(), userService);
 
@@ -57,15 +54,12 @@ namespace BalanceManagement.Test.Services
             var sourceUser = await userService.GetByIdAsync(sourceUserId);
             var targetUsert = await userService.GetByIdAsync(targetUserId);
 
-            
-            var sourceLastTransaction =  _fixture.GetDbContext().AccountTransactions.Where(w => w.AccountId == accountId)
-                .OrderByDescending(o => o.Id).FirstOrDefault();
+            var sourceTotalBalance = AccountServiceMock.Instance().GetTotalBalanceByAccountId(_fixture, accountId);
+            var targetTotalBalance = AccountServiceMock.Instance().GetTotalBalanceByAccountId(_fixture, targetAccountId);
 
-            var targetLastTransaction = _fixture.GetDbContext().AccountTransactions.Where(w => w.AccountId == targetAccountId)
-                .OrderByDescending(o => o.Id).FirstOrDefault();
-
-            Assert.True(sourceUser.TotalBalance.Equals(sourceLastTransaction.Total));
-            Assert.True(targetUsert.TotalBalance.Equals(targetLastTransaction.Total));
+            //Assert
+            Assert.True(sourceUser.TotalBalance.Equals(sourceTotalBalance));
+            Assert.True(targetUsert.TotalBalance.Equals(targetTotalBalance));
         }
 
 

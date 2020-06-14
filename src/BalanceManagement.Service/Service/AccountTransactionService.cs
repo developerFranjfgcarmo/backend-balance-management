@@ -24,8 +24,7 @@ namespace BalanceManagement.Service.Service
         }
 
         /// <summary>
-        /// With this package: Mr. Advice is an open source alternative to PostSharp. The transaction can be globally controlled.
-        /// I have used it like this.
+        ///  
         /// </summary>
         /// <param name="modifyBalance"></param>
         /// <returns></returns>
@@ -34,12 +33,6 @@ namespace BalanceManagement.Service.Service
         {
             try
             {
-                //IDbContextTransaction transaction = null;
-                //if (BalanceManagementDbContext.Database.CurrentTransaction == null)
-                //{
-                //    transaction = await BalanceManagementDbContext.Database.BeginTransactionAsync();
-                //}
-
                 var lastTotal = await BalanceManagementDbContext.AccountTransactions
                     .Where(w => w.AccountId == modifyBalance.AccountId).OrderByDescending(m => m.Id)
                     .Select(s => s.Total).FirstOrDefaultAsync();
@@ -49,10 +42,6 @@ namespace BalanceManagement.Service.Service
                 await BalanceManagementDbContext.AccountTransactions.AddAsync(balance);
                 await SaveChangesAsync();
                 await UpdateBalanceOfUser(modifyBalance.UserId);
-                //if (transaction != null)
-                //{
-                //    await transaction.CommitAsync();
-                //}
             }
             catch (Exception)
             {
@@ -81,7 +70,6 @@ namespace BalanceManagement.Service.Service
                 .Where(w => w.Id == balanceTransfer.AccountId).Select(s => s.User).FirstOrDefaultAsync();
             try
             {
-               // await using var transaction = await BalanceManagementDbContext.Database.BeginTransactionAsync();
                 await ModifyBalanceAsync(new ModifyBalanceDto
                 {
                     AccountId = balanceTransfer.AccountId,
@@ -96,7 +84,6 @@ namespace BalanceManagement.Service.Service
                     Description = $"Transfer from user: {sourceUser.UserName}",
                     UserId = targetUser.Id
                 });
-              //  await transaction.CommitAsync();
             }
             catch (Exception)
             {
