@@ -6,8 +6,6 @@ namespace BalanceManagement.Service.Attributes
 {
     /// <summary>
     ///  Aspect as attribute that initiates a transaction, perform commit when ends succeful, or call rollback on exception.
-    /// 
-    /// P.S: To make this work you must throw an exception in your code. 
     /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
     public class TransactionAsyncAttribute : Attribute, IMethodAsyncAdvice

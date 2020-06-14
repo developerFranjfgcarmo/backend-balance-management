@@ -7,7 +7,10 @@ using Serilog;
 
 namespace BalanceManagement.Api.Middleware
 {
-
+    /// <summary>
+    /// Allow catch all errors of the application and return  an InternalServerError.
+    /// The error will be shown in the output or in a log(production)
+    /// </summary>
     public class CustomExceptionMiddleware
     {
         private readonly RequestDelegate _next;

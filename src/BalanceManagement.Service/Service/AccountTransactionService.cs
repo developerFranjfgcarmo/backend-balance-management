@@ -11,7 +11,6 @@ using BalanceManagement.Data.Entities;
 using BalanceManagement.Service.Attributes;
 using BalanceManagement.Service.IService;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BalanceManagement.Service.Service
 {
@@ -24,7 +23,7 @@ namespace BalanceManagement.Service.Service
         }
 
         /// <summary>
-        ///  
+        ///  Add or remove balance of an user
         /// </summary>
         /// <param name="modifyBalance"></param>
         /// <returns></returns>

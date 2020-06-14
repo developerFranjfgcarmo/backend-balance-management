@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace BalanceManagement.Api.Filters
 {
+    /// <summary>
+    /// Allow validate the data contract
+    /// </summary>
     public class ValidationFilter : IAsyncActionFilter
     {
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)

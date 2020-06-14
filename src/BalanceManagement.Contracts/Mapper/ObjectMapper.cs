@@ -3,6 +3,9 @@ using AutoMapper;
 
 namespace BalanceManagement.Contracts.Mapper
 {
+    /// <summary>
+    /// Allow load the mapping defined in DtoMapper class  
+    /// </summary>
     public static class ObjectMapper
     {
         private static readonly Lazy<IMapper> Lazy = new Lazy<IMapper>(() =>

@@ -6,6 +6,9 @@ using BalanceManagement.Data.Entities;
 
 namespace BalanceManagement.Test.Mocks
 {
+    /// <summary>
+    /// Mock
+    /// </summary>
     public class AccountServiceMock
     {
         private static AccountServiceMock _accountServiceMock;

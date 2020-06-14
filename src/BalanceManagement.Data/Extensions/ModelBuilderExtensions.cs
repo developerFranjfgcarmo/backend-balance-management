@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BalanceManagement.Data.Extensions
 {
+    /// <summary>
+    /// Loads the configuration of the entities and run the seed.
+    /// </summary>
     public static class ModelBuilderExtensions
     {
         public static void ConfigurationBuilder(this ModelBuilder modelBuilder)
